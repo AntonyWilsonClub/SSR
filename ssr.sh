@@ -694,13 +694,6 @@ Install_SSR(){
 	echo -e "${Info} 所有步骤 安装完毕，开始启动 ShadowsocksR服务端..."
 	Start_SSR
 }
-Update_SSR(){
-	SSR_installation_status
-	echo -e "因破娃暂停更新ShadowsocksR服务端，所以此功能临时禁用。"
-	#cd ${ssr_folder}
-	#git pull
-	#Restart_SSR
-}
 Uninstall_SSR(){
 	[[ ! -e ${config_user_file} ]] && [[ ! -e ${ssr_folder} ]] && echo -e "${Error} 没有安装 ShadowsocksR，请检查 !" && exit 1
 	echo "确定要 卸载ShadowsocksR？[y/N]" && echo
@@ -1369,16 +1362,6 @@ Set_config_connect_verbose_info(){
 		fi
 	fi
 }
-Update_Shell(){
-	sh_new_ver=$(wget --no-check-certificate -qO- -t1 -T3 "https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/ssr.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
-	[[ -z ${sh_new_ver} ]] && echo -e "${Error} 无法链接到 Github !" && exit 0
-	if [[ -e "/etc/init.d/ssr" ]]; then
-		rm -rf /etc/init.d/ssr
-		Service_SSR
-	fi
-	wget "https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/ssr.sh" && chmod +x ssr.sh
-	echo -e "脚本已更新为最新版本[ ${sh_new_ver} ] !(注意：因为更新方式为直接覆盖当前运行的脚本，所以可能下面会提示一些报错，无视即可)" && exit 0
-}
 # 显示 菜单状态
 menu_status(){
 	if [[ -e ${config_user_file} ]]; then
@@ -1419,10 +1402,9 @@ echo -e "  ShadowsocksR 一键管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_
   ${Green_font_prefix}12.${Font_color_suffix} 查看 ShadowsocksR 日志
 ————————————
   ${Green_font_prefix}13.${Font_color_suffix} 其他功能
-  ${Green_font_prefix}14.${Font_color_suffix} 升级脚本
  "
 menu_status
-echo && read -e -p "请输入数字 [1-14]：" num
+echo && read -e -p "请输入数字 [1-13]：" num
 case "$num" in
 	1)
 	Install_SSR
@@ -1463,10 +1445,7 @@ case "$num" in
 	13)
 	Other_functions
 	;;
-	14)
-	Update_Shell
-	;;
 	*)
-	echo -e "${Error} 请输入正确的数字 [1-14]"
+	echo -e "${Error} 请输入正确的数字 [1-13]"
 	;;
 esac
