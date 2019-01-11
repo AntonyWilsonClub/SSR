@@ -5,7 +5,7 @@ export PATH
 #=================================================
 #	System Required: CentOS 6+/Debian 6+/Ubuntu 14.04+
 #	Description: Install the ShadowsocksR server
-#	Version: 2.0.38
+#	Version: 2.0.39
 #	Author: Antony
 #=================================================
 
@@ -128,7 +128,7 @@ ssr_link_qr(){
 	SSRbase64=$(urlsafe_base64 "${ip}:${port}:${SSRprotocol}:${method}:${SSRobfs}:${SSRPWDbase64}")
 	SSRurl="ssr://${SSRbase64}"
 	SSRQRcode="http://doub.pw/qr/qr.php?text=${SSRurl}"
-	ssr_link=" SSR   链接 : ${Red_font_prefix}${SSRurl}${Font_color_suffix} \n"
+	ssr_link=" SSR   链接 : ${SSRurl} \n"
 }
 ss_ssr_determine(){
 	protocol_suffix=`echo ${protocol} | awk -F "_" '{print $NF}'`
@@ -556,17 +556,12 @@ Debian_apt(){
 }
 # 下载 ShadowsocksR
 Download_SSR(){
+	./shadowsocksR.sh
+}
+{
 	cd "/usr/local/"
-	wget -N --no-check-certificate "https://github.com/ToyoDAdoubiBackup/shadowsocksr/archive/manyuser.zip"
-	#git config --global http.sslVerify false
-	#env GIT_SSL_NO_VERIFY=true git clone -b manyuser https://github.com/ToyoDAdoubiBackup/shadowsocksr.git
-	#[[ ! -e ${ssr_folder} ]] && echo -e "${Error} ShadowsocksR服务端 下载失败 !" && exit 1
-	[[ ! -e "manyuser.zip" ]] && echo -e "${Error} ShadowsocksR服务端 压缩包 下载失败 !" && rm -rf manyuser.zip && exit 1
-	unzip "manyuser.zip"
-	[[ ! -e "/usr/local/shadowsocksr-manyuser/" ]] && echo -e "${Error} ShadowsocksR服务端 解压失败 !" && rm -rf manyuser.zip && exit 1
-	mv "/usr/local/shadowsocksr-manyuser/" "/usr/local/shadowsocksr/"
-	[[ ! -e "/usr/local/shadowsocksr/" ]] && echo -e "${Error} ShadowsocksR服务端 重命名失败 !" && rm -rf manyuser.zip && rm -rf "/usr/local/shadowsocksr-manyuser/" && exit 1
-	rm -rf manyuser.zip
+	wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocksR.sh
+	chmod +x shadowsocksR.sh
 	[[ -e ${config_folder} ]] && rm -rf ${config_folder}
 	mkdir ${config_folder}
 	[[ ! -e ${config_folder} ]] && echo -e "${Error} ShadowsocksR配置文件的文件夹 建立失败 !" && exit 1
@@ -676,51 +671,6 @@ Uninstall_SSR(){
 	else
 		echo && echo " 卸载已取消..." && echo
 	fi
-}
-Check_Libsodium_ver(){
-	echo -e "${Info} 开始获取 libsodium 最新版本..."
-	Libsodiumr_ver=$(wget -qO- "https://github.com/jedisct1/libsodium/tags"|grep "/jedisct1/libsodium/releases/tag/"|head -1|sed -r 's/.*tag\/(.+)\">.*/\1/')
-	[[ -z ${Libsodiumr_ver} ]] && Libsodiumr_ver=${Libsodiumr_ver_backup}
-	echo -e "${Info} libsodium 最新版本为 ${Green_font_prefix}${Libsodiumr_ver}${Font_color_suffix} !"
-}
-Install_Libsodium(){
-	if [[ -e ${Libsodiumr_file} ]]; then
-		echo -e "${Error} libsodium 已安装 , 是否覆盖安装(更新)？[y/N]"
-		read -e -p "(默认: n):" yn
-		[[ -z ${yn} ]] && yn="n"
-		if [[ ${yn} == [Nn] ]]; then
-			echo "已取消..." && exit 1
-		fi
-	else
-		echo -e "${Info} libsodium 未安装，开始安装..."
-	fi
-	Check_Libsodium_ver
-	if [[ ${release} == "centos" ]]; then
-		yum update
-		echo -e "${Info} 安装依赖..."
-		yum -y groupinstall "Development Tools"
-		echo -e "${Info} 下载..."
-		wget  --no-check-certificate -N "https://github.com/jedisct1/libsodium/releases/download/${Libsodiumr_ver}/libsodium-${Libsodiumr_ver}.tar.gz"
-		echo -e "${Info} 解压..."
-		tar -xzf libsodium-${Libsodiumr_ver}.tar.gz && cd libsodium-${Libsodiumr_ver}
-		echo -e "${Info} 编译安装..."
-		./configure --disable-maintainer-mode && make -j2 && make install
-		echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
-	else
-		apt-get update
-		echo -e "${Info} 安装依赖..."
-		apt-get install -y build-essential
-		echo -e "${Info} 下载..."
-		wget  --no-check-certificate -N "https://github.com/jedisct1/libsodium/releases/download/${Libsodiumr_ver}/libsodium-${Libsodiumr_ver}.tar.gz"
-		echo -e "${Info} 解压..."
-		tar -xzf libsodium-${Libsodiumr_ver}.tar.gz && cd libsodium-${Libsodiumr_ver}
-		echo -e "${Info} 编译安装..."
-		./configure --disable-maintainer-mode && make -j2 && make install
-	fi
-	ldconfig
-	cd .. && rm -rf libsodium-${Libsodiumr_ver}.tar.gz && rm -rf libsodium-${Libsodiumr_ver}
-	[[ ! -e ${Libsodiumr_file} ]] && echo -e "${Error} libsodium 安装失败 !" && exit 1
-	echo && echo -e "${Info} libsodium 安装成功 !" && echo
 }
 # 显示 连接信息
 debian_View_user_connection_info(){
