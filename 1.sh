@@ -3,7 +3,6 @@ echo -e "
   ${Green_font_prefix}2.${Font_color_suffix} 安装 SeverStatus
   ${Green_font_prefix}3.${Font_color_suffix} 安装 BBR加速
  "
-	menu_status
 	echo && read -e -p "请输入数字 [1-3]：" num
 case "$num" in
 	1)
