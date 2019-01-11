@@ -13,7 +13,7 @@ clear
 echo
 echo "#############################################################"
 echo "# One click Install ShadowsocksR Server                     #"
-echo "# Intro: https://shadowsocks.be/9.html                      #"
+echo "# Intro:                      #"
 echo "# Author: Teddysun <i@teddysun.com>                         #"
 echo "# Github: https://github.com/shadowsocksr/shadowsocksr      #"
 echo "#############################################################"
@@ -426,7 +426,7 @@ ssr_link_qr(){
 	SSRPWDbase64=$(urlsafe_base64 "${shadowsockspwd}")
 	SSRbase64=$(urlsafe_base64 "${get_ip}:${shadowsocksport}:${SSRprotocol}:${shadowsockscipher}:${SSRobfs}:${SSRPWDbase64}")
 	SSRurl="ssr://${SSRbase64}"
-        ssr_link=" SSR   链接 : ${Red_font_prefix}${SSRurl}${Font_color_suffix} \n"
+        ssr_link=" SSR   链接 : ${SSRurl} \n"
 }
 ss_ssr_determine(){
 	protocol_suffix=`echo ${shadowsockprotocol} | awk -F "_" '{print $NF}'`
