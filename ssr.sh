@@ -121,13 +121,51 @@ urlsafe_base64(){
 	date=$(echo -n "$1"|base64|sed ':a;N;s/\n/ /g;ta'|sed 's/ //g;s/=//g;s/+/-/g;s/\//_/g')
 	echo -e "${date}"
 }
+ss_link_qr(){
+	SSbase64=$(urlsafe_base64 "${method}:${password}@${ip}:${port}")
+	SSurl="ss://${SSbase64}"
+	SSQRcode="http://doub.pw/qr/qr.php?text=${SSurl}"
+	ss_link=" SS    链接 : ${Green_font_prefix}${SSurl}${Font_color_suffix} \n SS  二维码 : ${Green_font_prefix}${SSQRcode}${Font_color_suffix}"
+}
 ssr_link_qr(){
 	SSRprotocol=$(echo ${protocol} | sed 's/_compatible//g')
 	SSRobfs=$(echo ${obfs} | sed 's/_compatible//g')
 	SSRPWDbase64=$(urlsafe_base64 "${password}")
 	SSRbase64=$(urlsafe_base64 "${ip}:${port}:${SSRprotocol}:${method}:${SSRobfs}:${SSRPWDbase64}")
 	SSRurl="ssr://${SSRbase64}"
-	ssr_link=" SSR   链接 : ${Red_font_prefix}${SSRurl}${Font_color_suffix} \n "
+	SSRQRcode="http://doub.pw/qr/qr.php?text=${SSRurl}"
+	ssr_link=" SSR   链接 : ${Red_font_prefix}${SSRurl}${Font_color_suffix} \n SSR 二维码 : ${Red_font_prefix}${SSRQRcode}${Font_color_suffix} \n "
+}
+ss_ssr_determine(){
+	protocol_suffix=`echo ${protocol} | awk -F "_" '{print $NF}'`
+	obfs_suffix=`echo ${obfs} | awk -F "_" '{print $NF}'`
+	if [[ ${protocol} = "origin" ]]; then
+		if [[ ${obfs} = "plain" ]]; then
+			ss_link_qr
+			ssr_link=""
+		else
+			if [[ ${obfs_suffix} != "compatible" ]]; then
+				ss_link=""
+			else
+				ss_link_qr
+			fi
+		fi
+	else
+		if [[ ${protocol_suffix} != "compatible" ]]; then
+			ss_link=""
+		else
+			if [[ ${obfs_suffix} != "compatible" ]]; then
+				if [[ ${obfs_suffix} = "plain" ]]; then
+					ss_link_qr
+				else
+					ss_link=""
+				fi
+			else
+				ss_link_qr
+			fi
+		fi
+	fi
+	ssr_link_qr
 }
 # 显示 配置信息
 View_User(){
@@ -150,6 +188,7 @@ View_User(){
 		echo -e " 单线程限速 : ${Green_font_prefix}${speed_limit_per_con} KB/S${Font_color_suffix}"
 		echo -e " 端口总限速 : ${Green_font_prefix}${speed_limit_per_user} KB/S${Font_color_suffix}"
 		echo -e "${ssr_link}"
+		echo -e "${ss_link}"
 		echo && echo "==================================================="
 	else
 		user_total=`${jq_file} '.port_password' ${config_user_file} | sed '$d' | sed "1d" | wc -l`
@@ -172,6 +211,7 @@ View_User(){
 			echo -e " 端口\t    : ${Green_font_prefix}${port}${Font_color_suffix}"
 			echo -e " 密码\t    : ${Green_font_prefix}${password}${Font_color_suffix}"
 			echo -e "${ssr_link}"
+			echo -e "${ss_link}"
 		done
 		echo && echo "==================================================="
 	fi
