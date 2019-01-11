@@ -57,24 +57,6 @@ SSR_installation_status(){
 	[[ ! -e ${config_user_file} ]] && echo -e "${Error} 没有发现 ShadowsocksR 配置文件，请检查 !" && exit 1
 	[[ ! -e ${ssr_folder} ]] && echo -e "${Error} 没有发现 ShadowsocksR 文件夹，请检查 !" && exit 1
 }
-Server_Speeder_installation_status(){
-	[[ ! -e ${Server_Speeder_file} ]] && echo -e "${Error} 没有安装 锐速(Server Speeder)，请检查 !" && exit 1
-}
-LotServer_installation_status(){
-	[[ ! -e ${LotServer_file} ]] && echo -e "${Error} 没有安装 LotServer，请检查 !" && exit 1
-}
-BBR_installation_status(){
-	if [[ ! -e ${BBR_file} ]]; then
-		echo -e "${Error} 没有发现 BBR脚本，开始下载..."
-		cd "${file}"
-		if ! wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/bbr.sh; then
-			echo -e "${Error} BBR 脚本下载失败 !" && exit 1
-		else
-			echo -e "${Info} BBR 脚本下载完成 !"
-			chmod +x bbr.sh
-		fi
-	fi
-}
 # 设置 防火墙规则
 Add_iptables(){
 	iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport ${ssr_port} -j ACCEPT
@@ -139,11 +121,6 @@ urlsafe_base64(){
 	date=$(echo -n "$1"|base64|sed ':a;N;s/\n/ /g;ta'|sed 's/ //g;s/=//g;s/+/-/g;s/\//_/g')
 	echo -e "${date}"
 }
-ss_link_qr(){
-	SSbase64=$(urlsafe_base64 "${method}:${password}@${ip}:${port}")
-	SSurl="ss://${SSbase64}"
-	ss_link=" SS    链接 : ${Green_font_prefix}${SSurl}${Font_color_suffix} \n "
-}
 ssr_link_qr(){
 	SSRprotocol=$(echo ${protocol} | sed 's/_compatible//g')
 	SSRobfs=$(echo ${obfs} | sed 's/_compatible//g')
@@ -151,37 +128,6 @@ ssr_link_qr(){
 	SSRbase64=$(urlsafe_base64 "${ip}:${port}:${SSRprotocol}:${method}:${SSRobfs}:${SSRPWDbase64}")
 	SSRurl="ssr://${SSRbase64}"
 	ssr_link=" SSR   链接 : ${Red_font_prefix}${SSRurl}${Font_color_suffix} \n "
-}
-ss_ssr_determine(){
-	protocol_suffix=`echo ${protocol} | awk -F "_" '{print $NF}'`
-	obfs_suffix=`echo ${obfs} | awk -F "_" '{print $NF}'`
-	if [[ ${protocol} = "origin" ]]; then
-		if [[ ${obfs} = "plain" ]]; then
-			ss_link_qr
-			ssr_link=""
-		else
-			if [[ ${obfs_suffix} != "compatible" ]]; then
-				ss_link=""
-			else
-				ss_link_qr
-			fi
-		fi
-	else
-		if [[ ${protocol_suffix} != "compatible" ]]; then
-			ss_link=""
-		else
-			if [[ ${obfs_suffix} != "compatible" ]]; then
-				if [[ ${obfs_suffix} = "plain" ]]; then
-					ss_link_qr
-				else
-					ss_link=""
-				fi
-			else
-				ss_link_qr
-			fi
-		fi
-	fi
-	ssr_link_qr
 }
 # 显示 配置信息
 View_User(){
@@ -203,11 +149,7 @@ View_User(){
 		echo -e " 设备数限制 : ${Green_font_prefix}${protocol_param}${Font_color_suffix}"
 		echo -e " 单线程限速 : ${Green_font_prefix}${speed_limit_per_con} KB/S${Font_color_suffix}"
 		echo -e " 端口总限速 : ${Green_font_prefix}${speed_limit_per_user} KB/S${Font_color_suffix}"
-		echo -e "${ss_link}"
 		echo -e "${ssr_link}"
-		echo -e " ${Green_font_prefix} 提示: ${Font_color_suffix}
- 在浏览器中，打开二维码链接，就可以看到二维码图片。
- 协议和混淆后面的[ _compatible ]，指的是 兼容原版协议/混淆。"
 		echo && echo "==================================================="
 	else
 		user_total=`${jq_file} '.port_password' ${config_user_file} | sed '$d' | sed "1d" | wc -l`
@@ -229,12 +171,8 @@ View_User(){
 			echo -e ${Separator_1}
 			echo -e " 端口\t    : ${Green_font_prefix}${port}${Font_color_suffix}"
 			echo -e " 密码\t    : ${Green_font_prefix}${password}${Font_color_suffix}"
-			echo -e "${ss_link}"
 			echo -e "${ssr_link}"
 		done
-		echo -e " ${Green_font_prefix} 提示: ${Font_color_suffix}
- 在浏览器中，打开二维码链接，就可以看到二维码图片。
- 协议和混淆后面的[ _compatible ]，指的是 兼容原版协议/混淆。"
 		echo && echo "==================================================="
 	fi
 }
@@ -284,12 +222,7 @@ Set_config_method(){
  
  ${Green_font_prefix}11.${Font_color_suffix} aes-128-cfb8
  ${Green_font_prefix}12.${Font_color_suffix} aes-192-cfb8
- ${Green_font_prefix}13.${Font_color_suffix} aes-256-cfb8
- 
- ${Green_font_prefix}14.${Font_color_suffix} salsa20
- ${Green_font_prefix}15.${Font_color_suffix} chacha20
- ${Green_font_prefix}16.${Font_color_suffix} chacha20-ietf
- ${Tip} salsa20/chacha20-*系列加密方式，需要额外安装依赖 libsodium ，否则会无法启动ShadowsocksR !" && echo
+ ${Green_font_prefix}13.${Font_color_suffix} aes-256-cfb8" && echo
 	read -e -p "(默认: aes-128-ctr):" ssr_method
 	[[ -z "${ssr_method}" ]] && ssr_method="5"
 	if [[ ${ssr_method} == "1" ]]; then
@@ -318,12 +251,6 @@ Set_config_method(){
 		ssr_method="aes-192-cfb8"
 	elif [[ ${ssr_method} == "13" ]]; then
 		ssr_method="aes-256-cfb8"
-	elif [[ ${ssr_method} == "14" ]]; then
-		ssr_method="salsa20"
-	elif [[ ${ssr_method} == "15" ]]; then
-		ssr_method="chacha20"
-	elif [[ ${ssr_method} == "16" ]]; then
-		ssr_method="chacha20-ietf"
 	else
 		ssr_method="aes-128-ctr"
 	fi
@@ -335,10 +262,7 @@ Set_config_protocol(){
  ${Green_font_prefix}1.${Font_color_suffix} origin
  ${Green_font_prefix}2.${Font_color_suffix} auth_sha1_v4
  ${Green_font_prefix}3.${Font_color_suffix} auth_aes128_md5
- ${Green_font_prefix}4.${Font_color_suffix} auth_aes128_sha1
- ${Green_font_prefix}5.${Font_color_suffix} auth_chain_a
- ${Green_font_prefix}6.${Font_color_suffix} auth_chain_b
- ${Tip} 如果使用 auth_chain_a 协议，请加密方式选择 none，混淆随意(建议 plain)" && echo
+ ${Green_font_prefix}4.${Font_color_suffix} auth_aes128_sha1" && echo
 	read -e -p "(默认: auth_aes128_md5):" ssr_protocol
 	[[ -z "${ssr_protocol}" ]] && ssr_protocol="3"
 	if [[ ${ssr_protocol} == "1" ]]; then
@@ -349,12 +273,8 @@ Set_config_protocol(){
 		ssr_protocol="auth_aes128_md5"
 	elif [[ ${ssr_protocol} == "4" ]]; then
 		ssr_protocol="auth_aes128_sha1"
-	elif [[ ${ssr_protocol} == "5" ]]; then
-		ssr_protocol="auth_chain_a"
-	elif [[ ${ssr_protocol} == "6" ]]; then
-		ssr_protocol="auth_chain_b"
 	else
-		ssr_protocol="auth_sha1_v4"
+		ssr_protocol="auth_aes128_md5"
 	fi
 	echo && echo ${Separator_1} && echo -e "	协议 : ${Green_font_prefix}${ssr_protocol}${Font_color_suffix}" && echo ${Separator_1} && echo
 	if [[ ${ssr_protocol} != "origin" ]]; then
@@ -1162,164 +1082,20 @@ Restart_SSR(){
 	check_pid
 	[[ ! -z ${PID} ]] && View_User
 }
-View_Log(){
-	SSR_installation_status
-	[[ ! -e ${ssr_log_file} ]] && echo -e "${Error} ShadowsocksR日志文件不存在 !" && exit 1
-	echo && echo -e "${Tip} 按 ${Red_font_prefix}Ctrl+C${Font_color_suffix} 终止查看日志" && echo -e "如果需要查看完整日志内容，请用 ${Red_font_prefix}cat ${ssr_log_file}${Font_color_suffix} 命令。" && echo
-	tail -f ${ssr_log_file}
-}
-# 锐速
-Configure_Server_Speeder(){
-	echo && echo -e "你要做什么？
- ${Green_font_prefix}1.${Font_color_suffix} 安装 锐速
- ${Green_font_prefix}2.${Font_color_suffix} 卸载 锐速
-————————
- ${Green_font_prefix}3.${Font_color_suffix} 启动 锐速
- ${Green_font_prefix}4.${Font_color_suffix} 停止 锐速
- ${Green_font_prefix}5.${Font_color_suffix} 重启 锐速
- ${Green_font_prefix}6.${Font_color_suffix} 查看 锐速 状态
- 
- 注意： 锐速和LotServer不能同时安装/启动！" && echo
-	read -e -p "(默认: 取消):" server_speeder_num
-	[[ -z "${server_speeder_num}" ]] && echo "已取消..." && exit 1
-	if [[ ${server_speeder_num} == "1" ]]; then
-		Install_ServerSpeeder
-	elif [[ ${server_speeder_num} == "2" ]]; then
-		Server_Speeder_installation_status
-		Uninstall_ServerSpeeder
-	elif [[ ${server_speeder_num} == "3" ]]; then
-		Server_Speeder_installation_status
-		${Server_Speeder_file} start
-		${Server_Speeder_file} status
-	elif [[ ${server_speeder_num} == "4" ]]; then
-		Server_Speeder_installation_status
-		${Server_Speeder_file} stop
-	elif [[ ${server_speeder_num} == "5" ]]; then
-		Server_Speeder_installation_status
-		${Server_Speeder_file} restart
-		${Server_Speeder_file} status
-	elif [[ ${server_speeder_num} == "6" ]]; then
-		Server_Speeder_installation_status
-		${Server_Speeder_file} status
-	else
-		echo -e "${Error} 请输入正确的数字(1-6)" && exit 1
-	fi
-}
-Install_ServerSpeeder(){
-	[[ -e ${Server_Speeder_file} ]] && echo -e "${Error} 锐速(Server Speeder) 已安装 !" && exit 1
-	cd /root
-	#借用91yun.rog的开心版锐速
-	wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/serverspeeder/master/serverspeeder.sh
-	[[ ! -e "serverspeeder.sh" ]] && echo -e "${Error} 锐速安装脚本下载失败 !" && exit 1
-	bash serverspeeder.sh
-	sleep 2s
-	PID=`ps -ef |grep -v grep |grep "serverspeeder" |awk '{print $2}'`
-	if [[ ! -z ${PID} ]]; then
-		rm -rf /root/serverspeeder.sh
-		rm -rf /root/91yunserverspeeder
-		rm -rf /root/91yunserverspeeder.tar.gz
-		echo -e "${Info} 锐速(Server Speeder) 安装完成 !" && exit 1
-	else
-		echo -e "${Error} 锐速(Server Speeder) 安装失败 !" && exit 1
-	fi
-}
-Uninstall_ServerSpeeder(){
-	echo "确定要卸载 锐速(Server Speeder)？[y/N]" && echo
-	read -e -p "(默认: n):" unyn
-	[[ -z ${unyn} ]] && echo && echo "已取消..." && exit 1
-	if [[ ${unyn} == [Yy] ]]; then
-		chattr -i /serverspeeder/etc/apx*
-		/serverspeeder/bin/serverSpeeder.sh uninstall -f
-		echo && echo "锐速(Server Speeder) 卸载完成 !" && echo
-	fi
-}
-# LotServer
-Configure_LotServer(){
-	echo && echo -e "你要做什么？
- ${Green_font_prefix}1.${Font_color_suffix} 安装 LotServer
- ${Green_font_prefix}2.${Font_color_suffix} 卸载 LotServer
-————————
- ${Green_font_prefix}3.${Font_color_suffix} 启动 LotServer
- ${Green_font_prefix}4.${Font_color_suffix} 停止 LotServer
- ${Green_font_prefix}5.${Font_color_suffix} 重启 LotServer
- ${Green_font_prefix}6.${Font_color_suffix} 查看 LotServer 状态
- 
- 注意： 锐速和LotServer不能同时安装/启动！" && echo
-	read -e -p "(默认: 取消):" lotserver_num
-	[[ -z "${lotserver_num}" ]] && echo "已取消..." && exit 1
-	if [[ ${lotserver_num} == "1" ]]; then
-		Install_LotServer
-	elif [[ ${lotserver_num} == "2" ]]; then
-		LotServer_installation_status
-		Uninstall_LotServer
-	elif [[ ${lotserver_num} == "3" ]]; then
-		LotServer_installation_status
-		${LotServer_file} start
-		${LotServer_file} status
-	elif [[ ${lotserver_num} == "4" ]]; then
-		LotServer_installation_status
-		${LotServer_file} stop
-	elif [[ ${lotserver_num} == "5" ]]; then
-		LotServer_installation_status
-		${LotServer_file} restart
-		${LotServer_file} status
-	elif [[ ${lotserver_num} == "6" ]]; then
-		LotServer_installation_status
-		${LotServer_file} status
-	else
-		echo -e "${Error} 请输入正确的数字(1-6)" && exit 1
-	fi
-}
-Install_LotServer(){
-	[[ -e ${LotServer_file} ]] && echo -e "${Error} LotServer 已安装 !" && exit 1
-	#Github: https://github.com/0oVicero0/serverSpeeder_Install
-	wget --no-check-certificate -qO /tmp/appex.sh "https://raw.githubusercontent.com/0oVicero0/serverSpeeder_Install/master/appex.sh"
-	[[ ! -e "/tmp/appex.sh" ]] && echo -e "${Error} LotServer 安装脚本下载失败 !" && exit 1
-	bash /tmp/appex.sh 'install'
-	sleep 2s
-	PID=`ps -ef |grep -v grep |grep "appex" |awk '{print $2}'`
-	if [[ ! -z ${PID} ]]; then
-		echo -e "${Info} LotServer 安装完成 !" && exit 1
-	else
-		echo -e "${Error} LotServer 安装失败 !" && exit 1
-	fi
-}
-Uninstall_LotServer(){
-	echo "确定要卸载 LotServer？[y/N]" && echo
-	read -e -p "(默认: n):" unyn
-	[[ -z ${unyn} ]] && echo && echo "已取消..." && exit 1
-	if [[ ${unyn} == [Yy] ]]; then
-		wget --no-check-certificate -qO /tmp/appex.sh "https://raw.githubusercontent.com/0oVicero0/serverSpeeder_Install/master/appex.sh" && bash /tmp/appex.sh 'uninstall'
-		echo && echo "LotServer 卸载完成 !" && echo
-	fi
-}
 # 其他功能
 Other_functions(){
 	echo && echo -e "  你要做什么？
 	
-  ${Green_font_prefix}1.${Font_color_suffix} 配置 锐速(ServerSpeeder)
-  ${Green_font_prefix}2.${Font_color_suffix} 配置 LotServer(锐速母公司)
-  注意： 锐速/LotServer 不支持 OpenVZ！
-  注意： 锐速/LotServer 不能共存！
-————————————
-  ${Green_font_prefix}3.${Font_color_suffix} 一键封禁 BT/PT/SPAM (iptables)
-  ${Green_font_prefix}4.${Font_color_suffix} 一键解封 BT/PT/SPAM (iptables)
-  ${Green_font_prefix}5.${Font_color_suffix} 切换 ShadowsocksR日志输出模式
-  ——说明：SSR默认只输出错误日志，此项可切换为输出详细的访问日志" && echo
+  ${Green_font_prefix}1.${Font_color_suffix} 一键封禁 BT/PT/SPAM (iptables)
+  ${Green_font_prefix}2.${Font_color_suffix} 一键解封 BT/PT/SPAM (iptables)" && echo
 	read -e -p "(默认: 取消):" other_num
 	[[ -z "${other_num}" ]] && echo "已取消..." && exit 1
 	if [[ ${other_num} == "1" ]]; then
-		Configure_Server_Speeder
-	elif [[ ${other_num} == "2" ]]; then
-		Configure_LotServer
-	elif [[ ${other_num} == "3" ]]; then
 		BanBTPTSPAM
-	elif [[ ${other_num} == "4" ]]; then
+	elif [[ ${other_num} == "2" ]]; then
 		UnBanBTPTSPAM
-	elif [[ ${other_num} == "5" ]]; then
-		Set_config_connect_verbose_info
 	else
-		echo -e "${Error} 请输入正确的数字 [1-5]" && exit 1
+		echo -e "${Error} 请输入正确的数字 [1-2]" && exit 1
 	fi
 }
 # 封禁 BT PT SPAM
@@ -1398,12 +1174,11 @@ echo -e "ShadowsocksR 一键管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_co
   ${Green_font_prefix}9.${Font_color_suffix}  启动 ShadowsocksR
   ${Green_font_prefix}10.${Font_color_suffix} 停止 ShadowsocksR
   ${Green_font_prefix}11.${Font_color_suffix} 重启 ShadowsocksR
-  ${Green_font_prefix}12.${Font_color_suffix} 查看 ShadowsocksR 日志
 ————————————
-  ${Green_font_prefix}13.${Font_color_suffix} 其他功能
+  ${Green_font_prefix}12.${Font_color_suffix} 其他功能
  "
 menu_status
-echo && read -e -p "请输入数字 [1-13]：" num
+echo && read -e -p "请输入数字 [1-12]：" num
 case "$num" in
 	1)
 	Install_SSR
@@ -1439,12 +1214,9 @@ case "$num" in
 	Restart_SSR
 	;;
 	12)
-	View_Log
-	;;
-	13)
 	Other_functions
 	;;
 	*)
-	echo -e "${Error} 请输入正确的数字 [1-13]"
+	echo -e "${Error} 请输入正确的数字 [1-12]"
 	;;
 esac
