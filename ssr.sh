@@ -1162,61 +1162,57 @@ echo -e "ShadowsocksR 一键管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_co
 ————————————
 
   ${Green_font_prefix}1.${Font_color_suffix} 安装 ShadowsocksR
-  ${Green_font_prefix}2.${Font_color_suffix} 更新 ShadowsocksR
-  ${Green_font_prefix}3.${Font_color_suffix} 卸载 ShadowsocksR
+  ${Green_font_prefix}2.${Font_color_suffix} 卸载 ShadowsocksR
 ————————————
-  ${Green_font_prefix}4.${Font_color_suffix} 查看 账号信息
-  ${Green_font_prefix}5.${Font_color_suffix} 显示 连接信息
-  ${Green_font_prefix}6.${Font_color_suffix} 设置 用户配置
-  ${Green_font_prefix}7.${Font_color_suffix} 手动 修改配置
-  ${Green_font_prefix}8.${Font_color_suffix} 切换 端口模式
+  ${Green_font_prefix}3.${Font_color_suffix} 查看 账号信息
+  ${Green_font_prefix}4.${Font_color_suffix} 显示 连接信息
+  ${Green_font_prefix}5.${Font_color_suffix} 设置 用户配置
+  ${Green_font_prefix}6.${Font_color_suffix} 手动 修改配置
+  ${Green_font_prefix}7.${Font_color_suffix} 切换 端口模式
 ————————————
-  ${Green_font_prefix}9.${Font_color_suffix}  启动 ShadowsocksR
-  ${Green_font_prefix}10.${Font_color_suffix} 停止 ShadowsocksR
-  ${Green_font_prefix}11.${Font_color_suffix} 重启 ShadowsocksR
+  ${Green_font_prefix}8.${Font_color_suffix}  启动 ShadowsocksR
+  ${Green_font_prefix}9.${Font_color_suffix} 停止 ShadowsocksR
+  ${Green_font_prefix}10.${Font_color_suffix} 重启 ShadowsocksR
 ————————————
-  ${Green_font_prefix}12.${Font_color_suffix} 其他功能
+  ${Green_font_prefix}11.${Font_color_suffix} 其他功能
  "
 menu_status
-echo && read -e -p "请输入数字 [1-12]：" num
+echo && read -e -p "请输入数字 [1-11]：" num
 case "$num" in
 	1)
 	Install_SSR
 	;;
 	2)
-	Update_SSR
-	;;
-	3)
 	Uninstall_SSR
 	;;
-	4)
+	3)
 	View_User
 	;;
-	5)
+	4)
 	View_user_connection_info
 	;;
-	6)
+	5)
 	Modify_Config
 	;;
-	7)
+	6)
 	Manually_Modify_Config
 	;;
-	8)
+	7)
 	Port_mode_switching
 	;;
-	9)
+	8)
 	Start_SSR
 	;;
-	10)
+	9)
 	Stop_SSR
 	;;
-	11)
+	10)
 	Restart_SSR
 	;;
-	12)
+	11)
 	Other_functions
 	;;
 	*)
-	echo -e "${Error} 请输入正确的数字 [1-12]"
+	echo -e "${Error} 请输入正确的数字 [1-11]"
 	;;
 esac
