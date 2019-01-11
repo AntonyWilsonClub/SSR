@@ -1,21 +1,12 @@
 #!/usr/bin/env bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
-#=================================================================#
-#   System Required:  CentOS 6,7, Debian, Ubuntu                  #
-#   Description: One click Install ShadowsocksR Server            #
-#   Author: Teddysun <i@teddysun.com>                             #
-#   Thanks: @breakwa11 <https://twitter.com/breakwa11>            #
-#   Intro:  https://shadowsocks.be/9.html                         #
-#=================================================================#
-
 clear
 echo
 echo "#############################################################"
 echo "# One click Install ShadowsocksR Server                     #"
-echo "# Intro:                                                    #"
-echo "# Author: Teddysun <i@teddysun.com>                         #"
-echo "# Github: https://github.com/shadowsocksr/shadowsocksr      #"
+echo "# Version: 1.0.0                                            #"
+echo "# AntonyWilson                                              #"
 echo "#############################################################"
 echo
 
@@ -192,26 +183,26 @@ pre_install(){
         exit 1
     fi
     # Set ShadowsocksR config password
-    echo "Please enter password for ShadowsocksR:"
-    read -p "(Default password: antonywilson.club):" shadowsockspwd
+    echo "请设置ShadowsocksR密码:"
+    read -p "(默认密码: antonywilson.club):" shadowsockspwd
     [ -z "${shadowsockspwd}" ] && shadowsockspwd="antonywilson.club"
     echo
     echo "---------------------------"
-    echo "password = ${shadowsockspwd}"
+    echo "密码 = ${shadowsockspwd}"
     echo "---------------------------"
     echo
     # Set ShadowsocksR config port
     while true
     do
-    echo -e "Please enter a port for ShadowsocksR [1-65535]"
-    read -p "(Default port: 2048):" shadowsocksport
+    echo -e "请设置ShadowsocksR端口:[1-65535]"
+    read -p "(默认端口: 2048):" shadowsocksport
     [ -z "${shadowsocksport}" ] && shadowsocksport=2048
     expr ${shadowsocksport} + 1 &>/dev/null
     if [ $? -eq 0 ]; then
         if [ ${shadowsocksport} -ge 1 ] && [ ${shadowsocksport} -le 65535 ] && [ ${shadowsocksport:0:1} != 0 ]; then
             echo
             echo "---------------------------"
-            echo "port = ${shadowsocksport}"
+            echo "端口 = ${shadowsocksport}"
             echo "---------------------------"
             echo
             break
@@ -416,49 +407,6 @@ install(){
 
     ldconfig
     # Install ShadowsocksR
-    urlsafe_base64(){
-	date=$(echo -n "$1"|base64|sed ':a;N;s/\n/ /g;ta'|sed 's/ //g;s/=//g;s/+/-/g;s/\//_/g')
-	echo -e "${date}"
-}
-ssr_link_qr(){
-	SSRprotocol=$(echo ${shadowsockprotocol} | sed 's/_compatible//g')
-	SSRobfs=$(echo ${shadowsockobfs} | sed 's/_compatible//g')
-	SSRPWDbase64=$(urlsafe_base64 "${shadowsockspwd}")
-	SSRbase64=$(urlsafe_base64 "${get_ip}:${shadowsocksport}:${SSRprotocol}:${shadowsockscipher}:${SSRobfs}:${SSRPWDbase64}")
-	SSRurl="ssr://${SSRbase64}"
-        ssr_link=" SSR   链接 : ${SSRurl} \n"
-}
-ss_ssr_determine(){
-	protocol_suffix=`echo ${shadowsockprotocol} | awk -F "_" '{print $NF}'`
-	obfs_suffix=`echo ${shadowsockobfs} | awk -F "_" '{print $NF}'`
-	if [[ ${shadowsockprotocol} = "origin" ]]; then
-		if [[ ${shadowsockobfs} = "plain" ]]; then
-			ss_link_qr
-			ssr_link=""
-		else
-			if [[ ${obfs_suffix} != "compatible" ]]; then
-				ss_link=""
-			else
-				ss_link_qr
-			fi
-		fi
-	else
-		if [[ ${protocol_suffix} != "compatible" ]]; then
-			ss_link=""
-		else
-			if [[ ${obfs_suffix} != "compatible" ]]; then
-				if [[ ${obfs_suffix} = "plain" ]]; then
-					ss_link_qr
-				else
-					ss_link=""
-				fi
-			else
-				ss_link_qr
-			fi
-		fi
-	fi
-	ssr_link_qr
-}
     cd ${cur_dir}
     tar zxf ${shadowsocks_r_file}.tar.gz
     mv ${shadowsocks_r_file}/shadowsocks /usr/local/
@@ -475,13 +423,13 @@ ss_ssr_determine(){
         clear
         echo
         echo -e "Congratulations, ShadowsocksR server install completed!"
-        echo -e "Your Server IP        : \033[41;37m $(get_ip) \033[0m"
-        echo -e "Your Server Port      : \033[41;37m ${shadowsocksport} \033[0m"
-        echo -e "Your Password         : \033[41;37m ${shadowsockspwd} \033[0m"
-        echo -e "Your Protocol         : \033[41;37m ${shadowsockprotocol} \033[0m"
-        echo -e "Your obfs             : \033[41;37m ${shadowsockobfs} \033[0m"
-        echo -e "Your Encryption Method: \033[41;37m ${shadowsockscipher} \033[0m"
-        echo -e "${ssr_link}"
+        echo -e "服务器地址 : \033[41;37m $(get_ip) \033[0m"
+        echo -e "服务器端口 : \033[41;37m ${shadowsocksport} \033[0m"
+        echo -e "服务器密码 : \033[41;37m ${shadowsockspwd} \033[0m"
+        echo -e "服务器协议 : \033[41;37m ${shadowsockprotocol} \033[0m"
+        echo -e "服务器混淆 : \033[41;37m ${shadowsockobfs} \033[0m"
+        echo -e "服务器加密 : \033[41;37m ${shadowsockscipher} \033[0m"
+        echo -e 
         echo
     else
         echo "ShadowsocksR install failed."
