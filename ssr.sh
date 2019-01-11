@@ -1202,9 +1202,9 @@ echo -e "ShadowsocksR 一键管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_co
   ${Green_font_prefix}6.${Font_color_suffix} 手动 修改配置
   ${Green_font_prefix}7.${Font_color_suffix} 切换 端口模式
 ————————————
-  ${Green_font_prefix}8.${Font_color_suffix}  启动 ShadowsocksR
+  ${Green_font_prefix}8.${Font_color_suffix} 启动 ShadowsocksR
   ${Green_font_prefix}9.${Font_color_suffix} 停止 ShadowsocksR
-  ${Green_font_prefix}10.${Font_color_suffix} 重启 ShadowsocksR
+  ${Green_font_prefix}10.${Font_color_suffix}重启 ShadowsocksR
 ————————————
   ${Green_font_prefix}11.${Font_color_suffix} 其他功能
  "
