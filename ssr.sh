@@ -1370,7 +1370,7 @@ Set_config_connect_verbose_info(){
 	fi
 }
 Update_Shell(){
-	sh_new_ver=$(wget -qO- -t1 -T3 "https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/ssr.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
+	sh_new_ver=$(wget --no-check-certificate -qO- -t1 -T3 "https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/ssr.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
 	[[ -z ${sh_new_ver} ]] && echo -e "${Error} 无法链接到 Github !" && exit 0
 	if [[ -e "/etc/init.d/ssr" ]]; then
 		rm -rf /etc/init.d/ssr
@@ -1418,8 +1418,8 @@ echo -e "  ShadowsocksR 一键管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_
   ${Green_font_prefix}11.${Font_color_suffix} 重启 ShadowsocksR
   ${Green_font_prefix}12.${Font_color_suffix} 查看 ShadowsocksR 日志
 ————————————
- ${Green_font_prefix}13.${Font_color_suffix} 其他功能
- ${Green_font_prefix}14.${Font_color_suffix} 升级脚本
+  ${Green_font_prefix}13.${Font_color_suffix} 其他功能
+  ${Green_font_prefix}14.${Font_color_suffix} 升级脚本
  "
 menu_status
 echo && read -e -p "请输入数字 [1-14]：" num
