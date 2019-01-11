@@ -416,6 +416,18 @@ install(){
 
     ldconfig
     # Install ShadowsocksR
+    urlsafe_base64(){
+	date=$(echo -n "$1"|base64|sed ':a;N;s/\n/ /g;ta'|sed 's/ //g;s/=//g;s/+/-/g;s/\//_/g')
+	echo -e "${date}"
+}
+ssr_link_qr(){
+	SSRprotocol=$(echo ${shadowsockprotocol} | sed 's/_compatible//g')
+	SSRobfs=$(echo ${shadowsockobfs} | sed 's/_compatible//g')
+	SSRPWDbase64=$(urlsafe_base64 "${shadowsockspwd}")
+	SSRbase64=$(urlsafe_base64 "${get_ip}:${shadowsocksport}:${SSRprotocol}:${shadowsockscipher}:${SSRobfs}:${SSRPWDbase64}")
+	SSRurl="ssr://${SSRbase64}"
+    ssr_link=" SSR   链接 : ${Red_font_prefix}${SSRurl}${Font_color_suffix} \n"
+}
     cd ${cur_dir}
     tar zxf ${shadowsocks_r_file}.tar.gz
     mv ${shadowsocks_r_file}/shadowsocks /usr/local/
@@ -438,7 +450,7 @@ install(){
         echo -e "Your Protocol         : \033[41;37m ${shadowsockprotocol} \033[0m"
         echo -e "Your obfs             : \033[41;37m ${shadowsockobfs} \033[0m"
         echo -e "Your Encryption Method: \033[41;37m ${shadowsockscipher} \033[0m"
-        echo
+        echo -e "${ssr_link}"
         echo
     else
         echo "ShadowsocksR install failed."
