@@ -426,7 +426,38 @@ ssr_link_qr(){
 	SSRPWDbase64=$(urlsafe_base64 "${shadowsockspwd}")
 	SSRbase64=$(urlsafe_base64 "${get_ip}:${shadowsocksport}:${SSRprotocol}:${shadowsockscipher}:${SSRobfs}:${SSRPWDbase64}")
 	SSRurl="ssr://${SSRbase64}"
-    ssr_link=" SSR   链接 : ${Red_font_prefix}${SSRurl}${Font_color_suffix} \n"
+        ssr_link=" SSR   链接 : ${Red_font_prefix}${SSRurl}${Font_color_suffix} \n"
+}
+ss_ssr_determine(){
+	protocol_suffix=`echo ${shadowsockprotocol} | awk -F "_" '{print $NF}'`
+	obfs_suffix=`echo ${shadowsockobfs} | awk -F "_" '{print $NF}'`
+	if [[ ${shadowsockprotocol} = "origin" ]]; then
+		if [[ ${shadowsockobfs} = "plain" ]]; then
+			ss_link_qr
+			ssr_link=""
+		else
+			if [[ ${obfs_suffix} != "compatible" ]]; then
+				ss_link=""
+			else
+				ss_link_qr
+			fi
+		fi
+	else
+		if [[ ${protocol_suffix} != "compatible" ]]; then
+			ss_link=""
+		else
+			if [[ ${obfs_suffix} != "compatible" ]]; then
+				if [[ ${obfs_suffix} = "plain" ]]; then
+					ss_link_qr
+				else
+					ss_link=""
+				fi
+			else
+				ss_link_qr
+			fi
+		fi
+	fi
+	ssr_link_qr
 }
     cd ${cur_dir}
     tar zxf ${shadowsocks_r_file}.tar.gz
