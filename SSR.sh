@@ -34,6 +34,7 @@ echo "退出成功"
 
 Uninstall_SSR(){
 ./SSR_Install.sh uninstall
+echo "卸载成功"
 }
 
 start_menu(){
