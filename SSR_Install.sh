@@ -5,7 +5,7 @@ clear
 echo
 echo "#############################################################"
 echo "# One click Install ShadowsocksR Server                     #"
-echo "# Version: 1.0.1                                            #"
+echo "# Version: 1.0.2                                            #"
 echo "# AntonyWilson                                              #"
 echo "#############################################################"
 echo
