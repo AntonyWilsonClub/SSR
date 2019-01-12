@@ -21,7 +21,8 @@ chmod +x BBR_Install.sh
 }
 
 Uninstall_SSR(){
-./SRR.sh uninstall}
+./SRR.sh uninstall
+}
 
 start_menu(){
 clear
@@ -53,4 +54,5 @@ case "$num" in
 	;;
   esac
 }
+
 start_menu
