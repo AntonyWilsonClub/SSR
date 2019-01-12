@@ -21,7 +21,7 @@ chmod +x BBR_Install.sh
 }
 
 Uninstall_SSR(){
-./SRR.sh uninstall
+./SSR_Install.sh uninstall
 }
 
 start_menu(){
