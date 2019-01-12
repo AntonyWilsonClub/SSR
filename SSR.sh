@@ -25,8 +25,11 @@ yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_
 }
 
 Uninstall_SH(){
-cd
 rm -f SSR.sh
+}
+
+Exit_SH(){
+echo "退出成功"
 }
 
 Uninstall_SSR(){
@@ -41,9 +44,10 @@ echo -e "
  ${Green_font_prefix}3.${Font_color_suffix} 安装 BBR
  ${Green_font_prefix}4.${Font_color_suffix} 安装 宝塔面板
  ${Green_font_prefix}5.${Font_color_suffix} 卸载 SSR
- ${Green_font_prefix}6.${Font_color_suffix} 卸载 脚本"
+ ${Green_font_prefix}6.${Font_color_suffix} 卸载 脚本
+ ${Green_font_prefix}7.${Font_color_suffix} 退出 脚本"
  echo
-read -p " 请输入数字 [1-5]:" num
+read -p " 请输入数字 [1-7]:" num
 case "$num" in
 	1)
 	Install_SSR
@@ -61,11 +65,15 @@ case "$num" in
 	Uninstall_SSR
 	;;
 	6)
-	
+	Uninstall_SH
+	;;
+	7)
+	Exit_SH
 	;;
 	*)
 	clear
-	echo -e "${Error}:请输入正确数字 [1-5]"
+	echo -e "${Error}:请输入正确数字 [1-7]"
+	start_menu
 	;;
   esac
 }
