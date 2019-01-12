@@ -3,21 +3,21 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
 Install_SSR(){
-wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/SSR.sh
-chmod +x SSR.h
-./SSR.h
+wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/SSR_Install.sh
+chmod +x SSR_Install.sh
+./SSR_Install.sh
 }
 
 Install_ServerStatus(){
-wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR-Status/master/ServerStatus.sh
-chmod +x ServerStatus.sh
-./ServerStatus.sh
+wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/ServerStatus_Install.sh
+chmod +x ServerStatus_Install.sh
+./ServerStatus_Install.sh
 }
 
 Install_BBR(){
-wget https://raw.githubusercontent.com/AntonyWilsonClub/BBR/master/BBR.sh
-chmod +x BBR.sh
-./BBR.sh
+wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/BBR_Install.sh
+chmod +x BBR_Install.sh
+./BBR_Install.sh
 }
 
 start_menu(){
