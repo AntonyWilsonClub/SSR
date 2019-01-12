@@ -1013,7 +1013,6 @@ case "$num" in
 	;;
 	*)
 	echo "请输入正确数字 [0-10]"
-	menu_client
 	;;
 esac
 }
@@ -1084,7 +1083,6 @@ case "$num" in
 	;;
 	*)
 	echo "请输入正确数字 [0-10]"
-	menu_server
 	;;
 esac
 }
