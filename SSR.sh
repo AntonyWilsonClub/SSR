@@ -71,7 +71,6 @@ case "$num" in
 	Exit_SH
 	;;
 	*)
-	clear
 	echo -e "${Error}:请输入正确数字 [1-7]"
 	start_menu
 	;;
