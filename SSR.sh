@@ -26,6 +26,7 @@ yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_
 
 Uninstall_SH(){
 rm -f SSR.sh
+echo "卸载成功"
 }
 
 Exit_SH(){
