@@ -73,7 +73,7 @@ case "$num" in
 	;;
 	*)
 	echo -e "${Error}:请输入正确数字 [1-7]"
-	sleep 3 s
+	sleep 3
 	start_menu
 	;;
   esac
