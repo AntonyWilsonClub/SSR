@@ -26,6 +26,9 @@ yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_
 
 Uninstall_SH(){
 rm -f SSR.sh
+rm -f BBR_Install.sh
+rm -f ServerStatus_Install.sh
+rm -f install_6.0.sh
 echo "卸载成功"
 }
 
