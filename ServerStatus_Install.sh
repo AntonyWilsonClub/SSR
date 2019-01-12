@@ -1013,12 +1013,13 @@ case "$num" in
 	;;
 	*)
 	echo "请输入正确数字 [0-10]"
+	menu_client
 	;;
 esac
 }
 menu_server(){
-echo && echo -e "  ServerStatus 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
-  -- Toyo | doub.io/shell-jc3 --
+echo && echo -e "
+ServerStatus 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
   
  ${Green_font_prefix} 0.${Font_color_suffix} 升级脚本
  ————————————
@@ -1083,6 +1084,7 @@ case "$num" in
 	;;
 	*)
 	echo "请输入正确数字 [0-10]"
+	menu_server
 	;;
 esac
 }
