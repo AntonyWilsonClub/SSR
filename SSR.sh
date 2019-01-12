@@ -20,14 +20,18 @@ chmod +x BBR_Install.sh
 ./BBR_Install.sh
 }
 
+Uninstall_SSR(){
+./SRR.sh uninstall}
+
 start_menu(){
 clear
 echo -e "
  ${Green_font_prefix}1.${Font_color_suffix} 安装 SSR
  ${Green_font_prefix}2.${Font_color_suffix} 安装 SeverStatus 
- ${Green_font_prefix}3.${Font_color_suffix} 安装 BBR"
+ ${Green_font_prefix}3.${Font_color_suffix} 安装 BBR
+ ${Green_font_prefix}4.${Font_color_suffix} 卸载 SSR"
  echo
-read -p " 请输入数字 [0-11]:" num
+read -p " 请输入数字 [1-4]:" num
 case "$num" in
 	1)
 	Install_SSR
@@ -38,9 +42,12 @@ case "$num" in
 	3)
 	Install_ServerStatus
 	;;
-  *)
+	4)
+	Uninstall_SSR
+	;;
+	*)
 	clear
-	echo -e "${Error}:请输入正确数字 [1-3]"
+	echo -e "${Error}:请输入正确数字 [1-4]"
 	sleep 5s
 	start_menu
 	;;
