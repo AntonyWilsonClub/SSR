@@ -2,13 +2,6 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 clear
-echo
-echo "#############################################################"
-echo "# One click Install ShadowsocksR Server                     #"
-echo "# Version: 1.0.2                                            #"
-echo "# AntonyWilson                                              #"
-echo "#############################################################"
-echo
 
 libsodium_file="libsodium-stable"
 libsodium_url="https://github.com/AntonyWilsonClub/SSR/raw/master/LATEST.tar.gz"
@@ -175,15 +168,15 @@ pre_install(){
     if check_sys packageManager yum || check_sys packageManager apt; then
         # Not support CentOS 5
         if centosversion 5; then
-            echo -e "$[{red}Error${plain}] Not supported CentOS 5, please change to CentOS 6+/Debian 7+/Ubuntu 12+ and try again."
+            echo -e "$[{red}Error${plain}]不支持 CentOS 5系统,请切换为 CentOS 6+/Debian 7+/Ubuntu 12+ 后重试"
             exit 1
         fi
     else
-        echo -e "[${red}Error${plain}] Your OS is not supported. please change OS to CentOS/Debian/Ubuntu and try again."
+        echo -e "[${red}Error${plain}]系统不支持. 系统要求：CentOS/Debian/Ubuntu"
         exit 1
     fi
     # Set ShadowsocksR config password
-    echo "请设置ShadowsocksR密码:"
+    echo "请设置ShadowsocksR 密码:"
     read -p "(默认密码: antonywilson.club):" shadowsockspwd
     [ -z "${shadowsockspwd}" ] && shadowsockspwd="antonywilson.club"
     echo
@@ -194,7 +187,7 @@ pre_install(){
     # Set ShadowsocksR config port
     while true
     do
-    echo -e "请设置ShadowsocksR端口:[1-65535]"
+    echo -e "请设置ShadowsocksR 端口:[1-65535]"
     read -p "(默认端口: 2048):" shadowsocksport
     [ -z "${shadowsocksport}" ] && shadowsocksport=2048
     expr ${shadowsocksport} + 1 &>/dev/null
@@ -208,32 +201,32 @@ pre_install(){
             break
         fi
     fi
-    echo -e "[${red}Error${plain}] Please enter a correct number [1-65535]"
+    echo -e "[${red}Error${plain}]请输入正确的端口:[1-65535]"
     done
 
     # Set shadowsocksR config stream ciphers
     while true
     do
-    echo -e "Please select stream cipher for ShadowsocksR:"
+    echo -e "请选择ShadowsocksR 加密方式:"
     for ((i=1;i<=${#ciphers[@]};i++ )); do
         hint="${ciphers[$i-1]}"
         echo -e "${green}${i}${plain}) ${hint}"
     done
-    read -p "Which cipher you'd select(Default: ${ciphers[1]}):" pick
+    read -p "默认加密方式: ${ciphers[1]}:" pick
     [ -z "$pick" ] && pick=2
     expr ${pick} + 1 &>/dev/null
     if [ $? -ne 0 ]; then
-        echo -e "[${red}Error${plain}] Please enter a number"
+        echo -e "[${red}Error${plain}]请输入数字:"
         continue
     fi
     if [[ "$pick" -lt 1 || "$pick" -gt ${#ciphers[@]} ]]; then
-        echo -e "[${red}Error${plain}] Please enter a number between 1 and ${#ciphers[@]}"
+        echo -e "[${red}Error${plain}]请输入1至${#ciphers[@]}的数字:"
         continue
     fi
     shadowsockscipher=${ciphers[$pick-1]}
     echo
     echo "---------------------------"
-    echo "cipher = ${shadowsockscipher}"
+    echo "加密方式 = ${shadowsockscipher}"
     echo "---------------------------"
     echo
     break
@@ -242,26 +235,26 @@ pre_install(){
     # Set shadowsocksR config protocol
     while true
     do
-    echo -e "Please select protocol for ShadowsocksR:"
+    echo -e "请选择ShadowsocksR 协议:"
     for ((i=1;i<=${#protocols[@]};i++ )); do
         hint="${protocols[$i-1]}"
         echo -e "${green}${i}${plain}) ${hint}"
     done
-    read -p "Which protocol you'd select(Default: ${protocols[4]}):" protocol
+    read -p "默认协议: ${protocols[4]}:" protocol
     [ -z "$protocol" ] && protocol=5
     expr ${protocol} + 1 &>/dev/null
     if [ $? -ne 0 ]; then
-        echo -e "[${red}Error${plain}] Input error, please input a number"
+        echo -e "[${red}Error${plain}]请输入数字:"
         continue
     fi
     if [[ "$protocol" -lt 1 || "$protocol" -gt ${#protocols[@]} ]]; then
-        echo -e "[${red}Error${plain}] Input error, please input a number between 1 and ${#protocols[@]}"
+        echo -e "[${red}Error${plain}]请输入1至${#protocols[@]}的数字:"
         continue
     fi
     shadowsockprotocol=${protocols[$protocol-1]}
     echo
     echo "---------------------------"
-    echo "protocol = ${shadowsockprotocol}"
+    echo "协议 = ${shadowsockprotocol}"
     echo "---------------------------"
     echo
     break
@@ -270,33 +263,33 @@ pre_install(){
     # Set shadowsocksR config obfs
     while true
     do
-    echo -e "Please select obfs for ShadowsocksR:"
+    echo -e "请选择ShadowsocksR 混淆方式:"
     for ((i=1;i<=${#obfs[@]};i++ )); do
         hint="${obfs[$i-1]}"
         echo -e "${green}${i}${plain}) ${hint}"
     done
-    read -p "Which obfs you'd select(Default: ${obfs[0]}):" r_obfs
+    read -p "默认混淆方式: ${obfs[0]}:" r_obfs
     [ -z "$r_obfs" ] && r_obfs=1
     expr ${r_obfs} + 1 &>/dev/null
     if [ $? -ne 0 ]; then
-        echo -e "[${red}Error${plain}] Input error, please input a number"
+        echo -e "[${red}Error${plain}]请输入数字:"
         continue
     fi
     if [[ "$r_obfs" -lt 1 || "$r_obfs" -gt ${#obfs[@]} ]]; then
-        echo -e "[${red}Error${plain}] Input error, please input a number between 1 and ${#obfs[@]}"
+        echo -e "[${red}Error${plain}]请输入1至${#obfs[@]}的数字:"
         continue
     fi
     shadowsockobfs=${obfs[$r_obfs-1]}
     echo
     echo "---------------------------"
-    echo "obfs = ${shadowsockobfs}"
+    echo "混淆方式 = ${shadowsockobfs}"
     echo "---------------------------"
     echo
     break
     done
 
     echo
-    echo "Press any key to start...or Press Ctrl+C to cancel"
+    echo "请按任意键开始(Ctrl+C取消)"
     char=`get_char`
     # Install necessary dependencies
     if check_sys packageManager yum; then
@@ -312,12 +305,12 @@ pre_install(){
 download_files(){
     # Download libsodium file
     if ! wget --no-check-certificate -O ${libsodium_file}.tar.gz ${libsodium_url}; then
-        echo -e "[${red}Error${plain}] Failed to download ${libsodium_file}.tar.gz!"
+        echo -e "[${red}Error${plain}] 下载失败 ${libsodium_file}.tar.gz!"
         exit 1
     fi
     # Download ShadowsocksR file
     if ! wget --no-check-certificate -O ${shadowsocks_r_file}.tar.gz ${shadowsocks_r_url}; then
-        echo -e "[${red}Error${plain}] Failed to download ShadowsocksR file!"
+        echo -e "[${red}Error${plain}] ShadowsocksR下载失败!"
         exit 1
     fi
     # Download ShadowsocksR init script
@@ -336,7 +329,7 @@ download_files(){
 
 # Firewall set
 firewall_set(){
-    echo -e "[${green}Info${plain}] firewall set start..."
+    echo -e "[${green}Info${plain}] 开始设置防火墙"
     if centosversion 6; then
         /etc/init.d/iptables status > /dev/null 2>&1
         if [ $? -eq 0 ]; then
@@ -422,17 +415,17 @@ install(){
 
         clear
         echo
-        echo -e "Congratulations, ShadowsocksR server install completed!"
-        echo -e "服务器地址 : \033[41;37m $(get_ip) \033[0m"
-        echo -e "服务器端口 : \033[41;37m ${shadowsocksport} \033[0m"
-        echo -e "服务器密码 : \033[41;37m ${shadowsockspwd} \033[0m"
-        echo -e "服务器协议 : \033[41;37m ${shadowsockprotocol} \033[0m"
-        echo -e "服务器混淆 : \033[41;37m ${shadowsockobfs} \033[0m"
-        echo -e "服务器加密 : \033[41;37m ${shadowsockscipher} \033[0m"
+        echo -e "恭喜,ShadowsocksR 安装完成!"
+        echo -e "服务器地址 :  $(get_ip)"
+        echo -e "服务器端口 :  ${shadowsocksport}"
+        echo -e "服务器密码 :  ${shadowsockspwd}"
+        echo -e "服务器协议 :  ${shadowsockprotocol}"
+        echo -e "服务器混淆 :  ${shadowsockobfs}"
+        echo -e "服务器加密 :  ${shadowsockscipher}"
         echo -e 
         echo
     else
-        echo "ShadowsocksR install failed."
+        echo "ShadowsocksR 安装失败"
         install_cleanup
         exit 1
     fi
@@ -447,10 +440,10 @@ install_cleanup(){
 
 # Uninstall ShadowsocksR
 uninstall_shadowsocksr(){
-    printf "Are you sure uninstall ShadowsocksR? (y/n)"
+    printf "确定要卸载 ShadowsocksR:(Y/N)"
     printf "\n"
-    read -p "(Default: n):" answer
-    [ -z ${answer} ] && answer="n"
+    read -p "(默认: N):" answer
+    [ -z ${answer} ] && answer="N"
     if [ "${answer}" == "y" ] || [ "${answer}" == "Y" ]; then
         /etc/init.d/shadowsocks status > /dev/null 2>&1
         if [ $? -eq 0 ]; then
@@ -465,10 +458,10 @@ uninstall_shadowsocksr(){
         rm -f /etc/init.d/shadowsocks
         rm -f /var/log/shadowsocks.log
         rm -rf /usr/local/shadowsocks
-        echo "ShadowsocksR uninstall success!"
+        echo "ShadowsocksR 卸载成功!"
     else
         echo
-        echo "uninstall cancelled, nothing to do..."
+        echo "卸载取消"
         echo
     fi
 }
