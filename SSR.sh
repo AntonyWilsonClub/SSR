@@ -65,8 +65,6 @@ case "$num" in
 	*)
 	clear
 	echo -e "${Error}:请输入正确数字 [1-5]"
-	sleep 3s
-	start_menu
 	;;
   esac
 }
