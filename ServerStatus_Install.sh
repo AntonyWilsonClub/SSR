@@ -2,14 +2,6 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-#=================================================
-#	System Required: CentOS/Debian/Ubuntu
-#	Description: ServerStatus client + server
-#	Version: 1.0.15
-#	Author: Toyo
-#	Blog: https://doub.io/shell-jc3/
-#=================================================
-
 sh_ver="1.0.15"
 filepath=$(cd "$(dirname "$0")"; pwd)
 file_1=$(echo -e "${filepath}"|awk -F "$0" '{print $1}')
@@ -325,8 +317,8 @@ Set_password(){
 	else
 		echo -e "请输入 ServerStatus 服务端中对应配置的密码[password]（字母/数字）"
 	fi
-	read -e -p "(默认: doub.io):" password_s
-	[[ -z "$password_s" ]] && password_s="doub.io"
+	read -e -p "(默认: ZlT893401923):" password_s
+	[[ -z "$password_s" ]] && password_s="ZlT893401923"
 	echo && echo "	================================================"
 	echo -e "	密码[password]: ${Red_background_prefix} ${password_s} ${Font_color_suffix}"
 	echo "	================================================" && echo
@@ -349,8 +341,8 @@ Set_type(){
 }
 Set_location(){
 	echo -e "请输入 ServerStatus 服务端要设置的节点位置[location]（支持中文，前提是你的系统和SSH工具支持中文输入）"
-	read -e -p "(默认: Hong Kong):" location_s
-	[[ -z "$location_s" ]] && location_s="Hong Kong"
+	read -e -p "(默认: 新加坡):" location_s
+	[[ -z "$location_s" ]] && location_s="新加坡"
 	echo && echo "	================================================"
 	echo -e "	节点位置[location]: ${Red_background_prefix} ${location_s} ${Font_color_suffix}"
 	echo "	================================================" && echo
@@ -370,7 +362,7 @@ Set_config_client(){
 }
 Set_ServerStatus_server(){
 	check_installed_server_status
-	echo && echo -e " 你要做什么？
+	echo && echo -e " 
 	
  ${Green_font_prefix} 1.${Font_color_suffix} 添加 节点配置
  ${Green_font_prefix} 2.${Font_color_suffix} 删除 节点配置
@@ -640,8 +632,8 @@ Install_jq(){
 Install_caddy(){
 	echo
 	echo -e "${Info} 是否由脚本自动配置HTTP服务(服务端的在线监控网站)，如果选择 N，则请在其他HTTP服务中配置网站根目录为：${Green_font_prefix}${web_file}${Font_color_suffix} [Y/n]"
-	read -e -p "(默认: Y 自动部署):" caddy_yn
-	[[ -z "$caddy_yn" ]] && caddy_yn="y"
+	read -e -p "(默认: N 不部署):" caddy_yn
+	[[ -z "$caddy_yn" ]] && caddy_yn="N"
 	if [[ "${caddy_yn}" == [Yy] ]]; then
 		Set_server "server"
 		Set_server_http_port
@@ -946,8 +938,8 @@ Update_Shell(){
 	echo -e "脚本已更新为最新版本[ ${sh_new_ver} ] !(注意：因为更新方式为直接覆盖当前运行的脚本，所以可能下面会提示一些报错，无视即可)" && exit 0
 }
 menu_client(){
-echo && echo -e "  ServerStatus 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
-  -- Toyo | doub.io/shell-jc3 --
+echo && echo -e "  
+ ServerStatus 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
   
  ${Green_font_prefix} 0.${Font_color_suffix} 升级脚本
  ————————————
