@@ -20,7 +20,6 @@ chmod +x BBR.sh
 ./BBR.sh
 }
 
-start_menu
 start_menu(){
 clear
 echo -e "
@@ -47,3 +46,5 @@ case "$num" in
 	;;
   esac
 }
+
+start_menu
