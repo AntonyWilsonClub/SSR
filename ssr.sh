@@ -275,8 +275,8 @@ pre_install(){
         hint="${obfs[$i-1]}"
         echo -e "${green}${i}${plain}) ${hint}"
     done
-    read -p "Which obfs you'd select(Default: ${obfs[5]}):" r_obfs
-    [ -z "$r_obfs" ] && r_obfs=6
+    read -p "Which obfs you'd select(Default: ${obfs[0]}):" r_obfs
+    [ -z "$r_obfs" ] && r_obfs=1
     expr ${r_obfs} + 1 &>/dev/null
     if [ $? -ne 0 ]; then
         echo -e "[${red}Error${plain}] Input error, please input a number"
