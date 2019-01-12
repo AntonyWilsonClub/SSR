@@ -58,7 +58,7 @@ case "$num" in
 	Install_ServerStatus
 	;;
 	3)
-	Install_ServerStatus
+	Install_BBR
 	;;
 	4)
 	Install_BT
