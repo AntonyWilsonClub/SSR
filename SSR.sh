@@ -2,28 +2,33 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
+#安装SSR服务
 Install_SSR(){
 wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/SSR_Install.sh
 chmod +x SSR_Install.sh
 ./SSR_Install.sh
 }
 
+#安装服务器监控服务
 Install_ServerStatus(){
 wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/ServerStatus_Install.sh
 chmod +x ServerStatus_Install.sh
 ./ServerStatus_Install.sh
 }
 
+#安装加速服务
 Install_BBR(){
 wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/BBR_Install.sh
 chmod +x BBR_Install.sh
 ./BBR_Install.sh
 }
 
+#安装宝塔面板
 Install_BT(){
 yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_6.0.sh && bash install.sh
 }
 
+#卸载脚本
 Uninstall_SH(){
 rm -f SSR.sh
 rm -f BBR_Install.sh
@@ -32,15 +37,18 @@ rm -f install_6.0.sh
 echo "卸载成功"
 }
 
+#退出脚本
 Exit_SH(){
 echo "退出成功"
 }
 
+#卸载SSR服务
 Uninstall_SSR(){
 ./SSR_Install.sh uninstall
 echo "卸载成功"
 }
 
+#开始菜单
 start_menu(){
 clear
 echo -e "
@@ -76,8 +84,6 @@ case "$num" in
 	Exit_SH
 	;;
 	*)
-	echo -e "${Error}:请输入正确数字 [1-7]"
-	sleep 3
 	start_menu
 	;;
   esac
