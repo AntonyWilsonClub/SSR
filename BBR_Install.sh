@@ -376,8 +376,7 @@ case "$num" in
 	optimizing_system
 	;;
 	11)
-	exit
-	./MENU
+	./MENU.sh
 	;;
 	*)
 	clear
