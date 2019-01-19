@@ -53,10 +53,10 @@ start_menu(){
 clear
 echo -e "
   一键安装管理脚本 V1.01
- ${Green_font_prefix}1.${Font_color_suffix} B B R 加 速  菜单 
- ${Green_font_prefix}2.${Font_color_suffix} 状 态 监 控  菜单 
- ${Green_font_prefix}3.${Font_color_suffix} 一 键 安 装  S S R
- ${Green_font_prefix}4.${Font_color_suffix} 一 键 安 装  宝塔面板
+ ${Green_font_prefix}1.${Font_color_suffix} 一 键 安 装  S S R
+ ${Green_font_prefix}2.${Font_color_suffix} 一 键 安 装  宝塔面板 
+ ${Green_font_prefix}3.${Font_color_suffix} B B R 加 速  菜单
+ ${Green_font_prefix}4.${Font_color_suffix} 状 态 监 控  菜单
  ${Green_font_prefix}5.${Font_color_suffix} 一 键 卸 载  S S R
  ${Green_font_prefix}6.${Font_color_suffix} 一 键 卸 载  脚本
  ${Green_font_prefix}7.${Font_color_suffix} 退 出 脚 本"
@@ -64,16 +64,16 @@ echo -e "
 read -p " 请输入数字 [1-7]:" num
 case "$num" in
 	1)
-	Install_BBR
-	;;
-	2)
-	Install_ServerStatus
-	;;
-	3)
 	Install_SSR
 	;;
-	4)
+	2)
 	Install_BT
+	;;
+	3)
+	Install_BBR
+	;;
+	4)
+	Install_ServerStatus
 	;;
 	5)
 	Uninstall_SSR
