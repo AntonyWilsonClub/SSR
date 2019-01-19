@@ -4,9 +4,9 @@ export PATH
 
 #安装SSR服务
 Install_SSR(){
-wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/SSR_Install.sh
-chmod +x SSR_Install.sh
-./SSR_Install.sh
+wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/SSR.sh
+chmod +x SSR.sh
+./SSR.sh
 }
 
 #安装服务器监控服务
@@ -30,6 +30,7 @@ yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_
 
 #卸载脚本
 Uninstall_SH(){
+rm -f MENU.sh
 rm -f SSR.sh
 rm -f BBR_Install.sh
 rm -f ServerStatus_Install.sh
@@ -55,8 +56,8 @@ echo -e "
   一键安装管理脚本 V1.01
  ${Green_font_prefix}1.${Font_color_suffix} 一 键 安 装  S S R
  ${Green_font_prefix}2.${Font_color_suffix} 一 键 安 装  宝塔面板 
- ${Green_font_prefix}3.${Font_color_suffix} B B R 加 速  菜单
- ${Green_font_prefix}4.${Font_color_suffix} 状 态 监 控  菜单
+ ${Green_font_prefix}3.${Font_color_suffix} B B R 加 速  管理菜单
+ ${Green_font_prefix}4.${Font_color_suffix} 状 态 监 控  guan'li菜单
  ${Green_font_prefix}5.${Font_color_suffix} 一 键 卸 载  S S R
  ${Green_font_prefix}6.${Font_color_suffix} 一 键 卸 载  脚本
  ${Green_font_prefix}7.${Font_color_suffix} 退 出 脚 本"
@@ -85,6 +86,9 @@ case "$num" in
 	Exit_SH
 	;;
 	*)
+	clear
+	echo -e "${Error}:请输入正确数字 [1-7]
+	sleep 3s
 	start_menu
 	;;
   esac
