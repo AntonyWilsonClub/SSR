@@ -87,7 +87,7 @@ case "$num" in
 	;;
 	*)
 	clear
-	echo -e "${Error}:请输入正确数字 [1-7]
+	echo -e "请输入正确数字 [1-7]"
 	sleep 3s
 	start_menu
 	;;
