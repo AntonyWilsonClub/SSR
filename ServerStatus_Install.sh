@@ -881,23 +881,21 @@ Set_iptables(){
 
 menu_client(){
 echo && echo -e "  
- ServerStatus 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
+ ServerStatus 一键安装管理脚本
   
- ————————————
+————————————————————————————————
  ${Green_font_prefix} 1.${Font_color_suffix} 安装 客户端
- ${Green_font_prefix} 2.${Font_color_suffix} 更新 客户端
- ${Green_font_prefix} 3.${Font_color_suffix} 卸载 客户端
-————————————
- ${Green_font_prefix} 4.${Font_color_suffix} 启动 客户端
- ${Green_font_prefix} 5.${Font_color_suffix} 停止 客户端
- ${Green_font_prefix} 6.${Font_color_suffix} 重启 客户端
-————————————
- ${Green_font_prefix} 7.${Font_color_suffix} 设置 客户端配置
- ${Green_font_prefix} 8.${Font_color_suffix} 查看 客户端信息
- ${Green_font_prefix} 9.${Font_color_suffix} 查看 客户端日志
-————————————
- ${Green_font_prefix}10.${Font_color_suffix} 切换为 服务端菜单
- ${Green_font_prefix}11.${Font_color_suffix} 返回 主菜单" && echo
+ ${Green_font_prefix} 2.${Font_color_suffix} 卸载 客户端
+————————————————————————————————
+ ${Green_font_prefix} 3.${Font_color_suffix} 启动 客户端
+ ${Green_font_prefix} 4.${Font_color_suffix} 停止 客户端
+ ${Green_font_prefix} 5.${Font_color_suffix} 重启 客户端
+————————————————————————————————
+ ${Green_font_prefix} 6.${Font_color_suffix} 设置 客户端配置
+ ${Green_font_prefix} 7.${Font_color_suffix} 查看 客户端信息
+————————————————————————————————
+ ${Green_font_prefix}8.${Font_color_suffix} 切换为 服务端菜单
+ ${Green_font_prefix}9.${Font_color_suffix} 返回 主菜单" && echo
 if [[ -e "${client_file}/status-client.py" ]]; then
 	check_pid_client
 	if [[ ! -z "${PID}" ]]; then
@@ -918,7 +916,7 @@ else
 	fi
 fi
 echo
-read -e -p " 请输入数字 [1-9]:" num
+read -e -p " 请输入数字 [1-10]:" num
 case "$num" in
 	1)
 	Install_ServerStatus_client
@@ -955,19 +953,19 @@ esac
 }
 menu_server(){
 echo && echo -e "
-ServerStatus 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
+ServerStatus 一键安装管理脚本
   
- ————————————
+————————————————————————————————
  ${Green_font_prefix} 1.${Font_color_suffix} 安装 服务端
  ${Green_font_prefix} 2.${Font_color_suffix} 卸载 服务端
-————————————
+————————————————————————————————
  ${Green_font_prefix} 3.${Font_color_suffix} 启动 服务端
  ${Green_font_prefix} 4.${Font_color_suffix} 停止 服务端
  ${Green_font_prefix} 5.${Font_color_suffix} 重启 服务端
-————————————
+————————————————————————————————
  ${Green_font_prefix} 6.${Font_color_suffix} 设置 服务端配置
  ${Green_font_prefix} 7.${Font_color_suffix} 查看 服务端信息
-————————————
+————————————————————————————————
  ${Green_font_prefix}8.${Font_color_suffix} 切换为 客户端菜单
  ${Green_font_prefix}9.${Font_color_suffix} 返回 主菜单" && echo
 if [[ -e "${server_file}/sergate" ]]; then
