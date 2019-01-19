@@ -728,40 +728,6 @@ Install_ServerStatus_client(){
 	echo -e "${Info} 所有步骤 安装完毕，开始启动..."
 	Start_ServerStatus_client
 }
-Update_ServerStatus_server(){
-	check_installed_server_status
-	check_pid_server
-	[[ ! -z ${PID} ]] && /etc/init.d/status-server stop
-	Download_Server_Status_server
-	rm -rf /etc/init.d/status-server
-	Service_Server_Status_server
-	Start_ServerStatus_server
-}
-Update_ServerStatus_client(){
-	check_installed_client_status
-	check_pid_client
-	[[ ! -z ${PID} ]] && /etc/init.d/status-client stop
-	if [[ ! -e "${client_file}/status-client.py" ]]; then
-		if [[ ! -e "${file}/status-client.py" ]]; then
-			echo -e "${Error} ServerStatus 客户端文件不存在 !" && exit 1
-		else
-			client_text="$(cat "${file}/status-client.py"|sed 's/\"//g;s/,//g;s/ //g')"
-			rm -rf "${file}/status-client.py"
-		fi
-	else
-		client_text="$(cat "${client_file}/status-client.py"|sed 's/\"//g;s/,//g;s/ //g')"
-	fi
-	server_s="$(echo -e "${client_text}"|grep "SERVER="|awk -F "=" '{print $2}')"
-	server_port_s="$(echo -e "${client_text}"|grep "PORT="|awk -F "=" '{print $2}')"
-	username_s="$(echo -e "${client_text}"|grep "USER="|awk -F "=" '{print $2}')"
-	password_s="$(echo -e "${client_text}"|grep "PASSWORD="|awk -F "=" '{print $2}')"
-	Download_Server_Status_client
-	Read_config_client
-	Modify_config_client
-	rm -rf /etc/init.d/status-client
-	Service_Server_Status_client
-	Start_ServerStatus_client
-}
 Start_ServerStatus_server(){
 	check_installed_server_status
 	check_pid_server
@@ -875,16 +841,6 @@ View_ServerStatus_client(){
  
 ————————————————————"
 }
-View_client_Log(){
-	[[ ! -e ${client_log_file} ]] && echo -e "${Error} 没有找到日志文件 !" && exit 1
-	echo && echo -e "${Tip} 按 ${Red_font_prefix}Ctrl+C${Font_color_suffix} 终止查看日志" && echo -e "如果需要查看完整日志内容，请用 ${Red_font_prefix}cat ${client_log_file}${Font_color_suffix} 命令。" && echo
-	tail -f ${client_log_file}
-}
-View_server_Log(){
-	[[ ! -e ${erver_log_file} ]] && echo -e "${Error} 没有找到日志文件 !" && exit 1
-	echo && echo -e "${Tip} 按 ${Red_font_prefix}Ctrl+C${Font_color_suffix} 终止查看日志" && echo -e "如果需要查看完整日志内容，请用 ${Red_font_prefix}cat ${erver_log_file}${Font_color_suffix} 命令。" && echo
-	tail -f ${erver_log_file}
-}
 Add_iptables_OUT(){
 	iptables_ADD_OUT_port=$1
 	iptables -I OUTPUT -m state --state NEW -m tcp -p tcp --dport ${iptables_ADD_OUT_port} -j ACCEPT
@@ -922,25 +878,11 @@ Set_iptables(){
 		chmod +x /etc/network/if-pre-up.d/iptables
 	fi
 }
-Update_Shell(){
-	sh_new_ver=$(wget --no-check-certificate -qO- -t1 -T3 "https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/status.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
-	[[ -z ${sh_new_ver} ]] && echo -e "${Error} 无法链接到 Github !" && exit 0
-	if [[ -e "/etc/init.d/status-client" ]]; then
-		rm -rf /etc/init.d/status-client
-		Service_Server_Status_client
-	fi
-	if [[ -e "/etc/init.d/status-server" ]]; then
-		rm -rf /etc/init.d/status-server
-		Service_Server_Status_server
-	fi
-	wget -N --no-check-certificate "https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/status.sh" && chmod +x status.sh
-	echo -e "脚本已更新为最新版本[ ${sh_new_ver} ] !(注意：因为更新方式为直接覆盖当前运行的脚本，所以可能下面会提示一些报错，无视即可)" && exit 0
-}
+
 menu_client(){
 echo && echo -e "  
  ServerStatus 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
   
- ${Green_font_prefix} 0.${Font_color_suffix} 升级脚本
  ————————————
  ${Green_font_prefix} 1.${Font_color_suffix} 安装 客户端
  ${Green_font_prefix} 2.${Font_color_suffix} 更新 客户端
@@ -954,7 +896,8 @@ echo && echo -e "
  ${Green_font_prefix} 8.${Font_color_suffix} 查看 客户端信息
  ${Green_font_prefix} 9.${Font_color_suffix} 查看 客户端日志
 ————————————
- ${Green_font_prefix}10.${Font_color_suffix} 切换为 服务端菜单" && echo
+ ${Green_font_prefix}10.${Font_color_suffix} 切换为 服务端菜单
+ ${Green_font_prefix}11.${Font_color_suffix} 返回 主菜单" && echo
 if [[ -e "${client_file}/status-client.py" ]]; then
 	check_pid_client
 	if [[ ! -z "${PID}" ]]; then
@@ -975,43 +918,38 @@ else
 	fi
 fi
 echo
-read -e -p " 请输入数字 [0-10]:" num
+read -e -p " 请输入数字 [1-9]:" num
 case "$num" in
-	0)
-	Update_Shell
-	;;
 	1)
 	Install_ServerStatus_client
 	;;
 	2)
-	Update_ServerStatus_client
-	;;
-	3)
 	Uninstall_ServerStatus_client
 	;;
-	4)
+	3)
 	Start_ServerStatus_client
 	;;
-	5)
+	4)
 	Stop_ServerStatus_client
 	;;
-	6)
+	5)
 	Restart_ServerStatus_client
 	;;
-	7)
+	6)
 	Set_ServerStatus_client
 	;;
-	8)
+	7)
 	View_ServerStatus_client
 	;;
-	9)
-	View_client_Log
-	;;
-	10)
+	8)
 	menu_server
 	;;
+	9)
+	cd
+	./MENU
+	;;
 	*)
-	echo "请输入正确数字 [0-10]"
+	echo "请输入正确数字 [1-9]"
 	;;
 esac
 }
@@ -1019,21 +957,19 @@ menu_server(){
 echo && echo -e "
 ServerStatus 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
   
- ${Green_font_prefix} 0.${Font_color_suffix} 升级脚本
  ————————————
  ${Green_font_prefix} 1.${Font_color_suffix} 安装 服务端
- ${Green_font_prefix} 2.${Font_color_suffix} 更新 服务端
- ${Green_font_prefix} 3.${Font_color_suffix} 卸载 服务端
+ ${Green_font_prefix} 2.${Font_color_suffix} 卸载 服务端
 ————————————
- ${Green_font_prefix} 4.${Font_color_suffix} 启动 服务端
- ${Green_font_prefix} 5.${Font_color_suffix} 停止 服务端
- ${Green_font_prefix} 6.${Font_color_suffix} 重启 服务端
+ ${Green_font_prefix} 3.${Font_color_suffix} 启动 服务端
+ ${Green_font_prefix} 4.${Font_color_suffix} 停止 服务端
+ ${Green_font_prefix} 5.${Font_color_suffix} 重启 服务端
 ————————————
- ${Green_font_prefix} 7.${Font_color_suffix} 设置 服务端配置
- ${Green_font_prefix} 8.${Font_color_suffix} 查看 服务端信息
- ${Green_font_prefix} 9.${Font_color_suffix} 查看 服务端日志
+ ${Green_font_prefix} 6.${Font_color_suffix} 设置 服务端配置
+ ${Green_font_prefix} 7.${Font_color_suffix} 查看 服务端信息
 ————————————
- ${Green_font_prefix}10.${Font_color_suffix} 切换为 客户端菜单" && echo
+ ${Green_font_prefix}8.${Font_color_suffix} 切换为 客户端菜单
+ ${Green_font_prefix}9.${Font_color_suffix} 返回 主菜单" && echo
 if [[ -e "${server_file}/sergate" ]]; then
 	check_pid_server
 	if [[ ! -z "${PID}" ]]; then
@@ -1045,43 +981,38 @@ else
 	echo -e " 当前状态: 服务端 ${Red_font_prefix}未安装${Font_color_suffix}"
 fi
 echo
-read -e -p " 请输入数字 [0-10]:" num
+read -e -p " 请输入数字 [1-9]:" num
 case "$num" in
-	0)
-	Update_Shell
-	;;
 	1)
 	Install_ServerStatus_server
 	;;
 	2)
-	Update_ServerStatus_server
-	;;
-	3)
 	Uninstall_ServerStatus_server
 	;;
-	4)
+	3)
 	Start_ServerStatus_server
 	;;
-	5)
+	4)
 	Stop_ServerStatus_server
 	;;
-	6)
+	5)
 	Restart_ServerStatus_server
 	;;
-	7)
+	6)
 	Set_ServerStatus_server
 	;;
-	8)
+	7)
 	List_ServerStatus_server
 	;;
-	9)
-	View_server_Log
-	;;
-	10)
+	8)
 	menu_client
 	;;
+	9)
+	cd
+	./MENU
+	;;
 	*)
-	echo "请输入正确数字 [0-10]"
+	echo "请输入正确数字 [1-9]"
 	;;
 esac
 }
