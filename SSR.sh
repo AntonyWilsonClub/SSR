@@ -64,16 +64,16 @@ echo -e "
 read -p " 请输入数字 [1-7]:" num
 case "$num" in
 	1)
-	Install_SSR
-	;;
-	2)
-	Install_BT
-	;;
-	3)
 	Install_BBR
 	;;
-	4)
+	2)
 	Install_ServerStatus
+	;;
+	3)
+	Install_SSR
+	;;
+	4)
+	Install_BT
 	;;
 	5)
 	Uninstall_SSR
