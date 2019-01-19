@@ -893,8 +893,8 @@ echo && echo -e "
  ${Green_font_prefix} 6.${Font_color_suffix} 设置 客户端配置
  ${Green_font_prefix} 7.${Font_color_suffix} 查看 客户端信息
 ——————————————————————
- ${Green_font_prefix}8.${Font_color_suffix} 切换为 服务端菜单
- ${Green_font_prefix}9.${Font_color_suffix} 返回 主菜单" && echo
+ ${Green_font_prefix} 8.${Font_color_suffix} 切换为 服务端菜单
+ ${Green_font_prefix} 9.${Font_color_suffix} 返回 主菜单" && echo
 if [[ -e "${client_file}/status-client.py" ]]; then
 	check_pid_client
 	if [[ ! -z "${PID}" ]]; then
@@ -964,8 +964,8 @@ ServerStatus 一键安装管理脚本
  ${Green_font_prefix} 6.${Font_color_suffix} 设置 服务端配置
  ${Green_font_prefix} 7.${Font_color_suffix} 查看 服务端信息
 ——————————————————————
- ${Green_font_prefix}8.${Font_color_suffix} 切换为 客户端菜单
- ${Green_font_prefix}9.${Font_color_suffix} 返回 主菜单" && echo
+ ${Green_font_prefix} 8.${Font_color_suffix} 切换为 客户端菜单
+ ${Green_font_prefix} 9.${Font_color_suffix} 返回 主菜单" && echo
 if [[ -e "${server_file}/sergate" ]]; then
 	check_pid_server
 	if [[ ! -z "${PID}" ]]; then
