@@ -4,6 +4,7 @@ export PATH
 
 #安装SSR服务
 Install_SSR(){
+rm -f SSR.sh
 wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/SSR.sh
 chmod +x SSR.sh
 ./SSR.sh
@@ -11,6 +12,7 @@ chmod +x SSR.sh
 
 #安装服务器监控服务
 Install_ServerStatus(){
+rm -f ServerStatus_Install.sh
 wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/ServerStatus_Install.sh
 chmod +x ServerStatus_Install.sh
 ./ServerStatus_Install.sh
@@ -18,6 +20,7 @@ chmod +x ServerStatus_Install.sh
 
 #安装加速服务
 Install_BBR(){
+rm -f BBR_Install.sh
 wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/BBR_Install.sh
 chmod +x BBR_Install.sh
 ./BBR_Install.sh
@@ -25,6 +28,7 @@ chmod +x BBR_Install.sh
 
 #安装宝塔面板
 Install_BT(){
+rm -f install_6.0.sh
 yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_6.0.sh && bash install.sh
 }
 
