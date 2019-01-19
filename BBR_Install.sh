@@ -2,15 +2,6 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-#=================================================
-#	System Required: CentOS 6/7,Debian 8/9,Ubuntu 16+
-#	Description: BBR+BBR魔改版+BBRplus+Lotserver
-#	Version: 1.2.1
-#	Author: 千影,cx9208
-#	Blog: https://www.94ish.me/
-#=================================================
-
-sh_ver="1.2.1"
 github="raw.githubusercontent.com/chiakge/Linux-NetSpeed/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -69,7 +60,7 @@ installbbrplus(){
 	detele_kernel
 	BBR_grub
 	echo -e "${Tip} 重启VPS后，请重新运行脚本开启${Red_font_prefix}BBRplus${Font_color_suffix}"
-	stty erase '^H' && read -p "需要重启VPS后，才能开启BBRplus，是否现在重启 ? [Y/n] :" yn
+	stty erase '^H' && read -p "需要重启VPS后，才能开启BBRplus，是否现在重启 ? [Y/N] :" yn
 	[ -z "${yn}" ] && yn="y"
 	if [[ $yn == [Yy] ]]; then
 		echo -e "${Info} VPS 重启中..."
@@ -291,51 +282,31 @@ optimizing_system(){
 	sed -i '/net.ipv4.tcp_max_orphans/d' /etc/sysctl.conf
 	sed -i '/net.ipv4.ip_forward/d' /etc/sysctl.conf
 	echo "fs.file-max = 1000000
-fs.inotify.max_user_instances = 8192
-net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_fin_timeout = 30
-net.ipv4.tcp_tw_reuse = 1
-net.ipv4.ip_local_port_range = 1024 65000
-net.ipv4.tcp_max_syn_backlog = 16384
-net.ipv4.tcp_max_tw_buckets = 6000
-net.ipv4.route.gc_timeout = 100
-net.ipv4.tcp_syn_retries = 1
-net.ipv4.tcp_synack_retries = 1
-net.core.somaxconn = 32768
-net.core.netdev_max_backlog = 32768
-net.ipv4.tcp_timestamps = 0
-net.ipv4.tcp_max_orphans = 32768
-# forward ipv4
-net.ipv4.ip_forward = 1">>/etc/sysctl.conf
+        fs.inotify.max_user_instances = 8192
+        net.ipv4.tcp_syncookies = 1
+        net.ipv4.tcp_fin_timeout = 30
+        net.ipv4.tcp_tw_reuse = 1
+        net.ipv4.ip_local_port_range = 1024 65000
+        net.ipv4.tcp_max_syn_backlog = 16384
+        net.ipv4.tcp_max_tw_buckets = 6000
+        net.ipv4.route.gc_timeout = 100
+        net.ipv4.tcp_syn_retries = 1
+        net.ipv4.tcp_synack_retries = 1
+        net.core.somaxconn = 32768
+        net.core.netdev_max_backlog = 32768
+        net.ipv4.tcp_timestamps = 0
+        net.ipv4.tcp_max_orphans = 32768
+        # forward ipv4
+        net.ipv4.ip_forward = 1">>/etc/sysctl.conf
 	sysctl -p
 	echo "*               soft    nofile           1000000
 *               hard    nofile          1000000">/etc/security/limits.conf
 	echo "ulimit -SHn 1000000">>/etc/profile
-	read -p "需要重启VPS后，才能生效系统优化配置，是否现在重启 ? [Y/n] :" yn
+	read -p "需要重启VPS后，才能生效系统优化配置，是否现在重启 ? [Y/N] :" yn
 	[ -z "${yn}" ] && yn="y"
 	if [[ $yn == [Yy] ]]; then
 		echo -e "${Info} VPS 重启中..."
 		reboot
-	fi
-}
-#更新脚本
-Update_Shell(){
-	echo -e "当前版本为 [ ${sh_ver} ]，开始检测最新版本..."
-	sh_new_ver=$(wget --no-check-certificate -qO- "http://${github}/tcp.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1)
-	[[ -z ${sh_new_ver} ]] && echo -e "${Error} 检测最新版本失败 !" && start_menu
-	if [[ ${sh_new_ver} != ${sh_ver} ]]; then
-		echo -e "发现新版本[ ${sh_new_ver} ]，是否更新？[Y/n]"
-		read -p "(默认: y):" yn
-		[[ -z "${yn}" ]] && yn="y"
-		if [[ ${yn} == [Yy] ]]; then
-			wget -N --no-check-certificate http://${github}/tcp.sh && chmod +x tcp.sh
-			echo -e "脚本已更新为最新版本[ ${sh_new_ver} ] !"
-		else
-			echo && echo "	已取消..." && echo
-		fi
-	else
-		echo -e "当前已是最新版本[ ${sh_new_ver} ] !"
-		sleep 5s
 	fi
 }
 
@@ -343,9 +314,8 @@ Update_Shell(){
 start_menu(){
 clear
 echo && echo -e " 
-TCP加速 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
-  
- ${Green_font_prefix}0.${Font_color_suffix} 升级脚本
+BBR加速 一键安装管理脚本
+
 ————————————内核管理————————————
  ${Green_font_prefix}1.${Font_color_suffix} 安装 BBR/BBR魔改版内核
  ${Green_font_prefix}2.${Font_color_suffix} 安装 BBRplus版内核 
@@ -359,7 +329,7 @@ TCP加速 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_su
 ————————————杂项管理————————————
  ${Green_font_prefix}9.${Font_color_suffix} 卸载全部加速
  ${Green_font_prefix}10.${Font_color_suffix} 系统配置优化
- ${Green_font_prefix}11.${Font_color_suffix} 退出脚本
+ ${Green_font_prefix}11.${Font_color_suffix} 返回主菜单
 ————————————————————————————————" && echo
 
 	check_status
@@ -370,7 +340,7 @@ TCP加速 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_su
 		
 	fi
 echo
-read -p " 请输入数字 [0-11]:" num
+read -p " 请输入数字 [1-11]:" num
 case "$num" in
 	0)
 	Update_Shell
@@ -406,12 +376,13 @@ case "$num" in
 	optimizing_system
 	;;
 	11)
-	exit 1
+	cd
+	./MENU
 	;;
 	*)
 	clear
-	echo -e "${Error}:请输入正确数字 [0-11]"
-	sleep 5s
+	echo -e "${Error}:请输入正确数字 [1-11]"
+	sleep 3s
 	start_menu
 	;;
 esac
