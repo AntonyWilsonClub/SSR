@@ -946,7 +946,7 @@ case "$num" in
 	;;
 	9)
 	cd
-	./MENU
+	./MENU.sh
 	;;
 	*)
 	echo "请输入正确数字 [1-9]"
@@ -1008,8 +1008,7 @@ case "$num" in
 	menu_client
 	;;
 	9)
-	cd
-	./MENU
+	./MENU.sh
 	;;
 	*)
 	echo "请输入正确数字 [1-9]"
