@@ -316,12 +316,12 @@ download_files(){
     # Download ShadowsocksR init script
     if check_sys packageManager yum; then
         if ! wget --no-check-certificate https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/ssr -O /etc/init.d/shadowsocks; then
-            echo -e "[${red}Error${plain}] Failed to download ShadowsocksR chkconfig file!"
+            echo -e "[${red}Error${plain}] ShadowsocksR配置文件下载失败!"
             exit 1
         fi
     elif check_sys packageManager apt; then
         if ! wget --no-check-certificate https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/ssr-bebian -O /etc/init.d/shadowsocks; then
-            echo -e "[${red}Error${plain}] Failed to download ShadowsocksR chkconfig file!"
+            echo -e "[${red}Error${plain}] ShadowsocksR配置文件下载失败!"
             exit 1
         fi
     fi
@@ -340,7 +340,7 @@ firewall_set(){
                 /etc/init.d/iptables save
                 /etc/init.d/iptables restart
             else
-                echo -e "[${green}Info${plain}] port ${shadowsocksport} has been set up."
+                echo -e "[${green}Info${plain}] 端口 ${shadowsocksport} 已设置."
             fi
         else
             echo -e "[${yellow}Warning${plain}] iptables looks like shutdown or not installed, please manually set it if necessary."
@@ -353,10 +353,10 @@ firewall_set(){
             firewall-cmd --permanent --zone=${default_zone} --add-port=${shadowsocksport}/udp
             firewall-cmd --reload
         else
-            echo -e "[${yellow}Warning${plain}] firewalld looks like not running or not installed, please enable port ${shadowsocksport} manually if necessary."
+            echo -e "[${yellow}Warning${plain}] 防火墙未安装或未启动, 请启用端口 ${shadowsocksport} ."
         fi
     fi
-    echo -e "[${green}Info${plain}] firewall set completed..."
+    echo -e "[${green}Info${plain}] 防火墙设置成功"
 }
 
 # Config ShadowsocksR
