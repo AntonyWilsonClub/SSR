@@ -49,7 +49,7 @@ echo "退出成功"
 
 #卸载SSR服务
 Uninstall_SSR(){
-./SSR_Install.sh uninstall
+./SSR.sh uninstall
 echo "卸载成功"
 }
 
