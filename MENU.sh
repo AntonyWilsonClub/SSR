@@ -57,7 +57,7 @@ echo "卸载成功"
 start_menu(){
 clear
 echo -e "
-  一键安装管理脚本 V1.04
+  一键安装管理脚本 V1.05
  ${Green_font_prefix}1.${Font_color_suffix} 一 键 安 装  S S R
  ${Green_font_prefix}2.${Font_color_suffix} 一 键 安 装  宝塔面板 
  ${Green_font_prefix}3.${Font_color_suffix} B B R 加 速  管理菜单
