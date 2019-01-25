@@ -745,10 +745,11 @@ Restart_ServerStatus_server(){
 	check_pid_server
 	[[ ! -z ${PID} ]] && /etc/init.d/status-server stop
 	/etc/init.d/status-server start
+	./ServerStatus_Install.sh -menu_server
 }
 Uninstall_ServerStatus_server(){
 	check_installed_server_status
-	echo "确定要卸载 ServerStatus 服务端(如果同时安装了客户端，则只会删除服务端) ? [y/N]"
+	echo "确定要卸载 ServerStatus 服务端(如果同时安装了客户端，则只会删除服务端) ? [Y/N]"
 	echo
 	read -e -p "(默认: n):" unyn
 	[[ -z ${unyn} ]] && unyn="n"
@@ -802,7 +803,7 @@ Restart_ServerStatus_client(){
 }
 Uninstall_ServerStatus_client(){
 	check_installed_client_status
-	echo "确定要卸载 ServerStatus 客户端(如果同时安装了服务端，则只会删除客户端) ? [y/N]"
+	echo "确定要卸载 ServerStatus 客户端(如果同时安装了服务端，则只会删除客户端) ? [Y/N]"
 	echo
 	read -e -p "(默认: n):" unyn
 	[[ -z ${unyn} ]] && unyn="n"
@@ -947,6 +948,8 @@ case "$num" in
 	;;
 	*)
 	echo "请输入正确数字 [1-9]"
+	sleep 2s
+	menu_client
 	;;
 esac
 }
@@ -1008,6 +1011,8 @@ case "$num" in
 	;;
 	*)
 	echo "请输入正确数字 [1-9]"
+	sleep 2s
+	menu_server
 	;;
 esac
 }
