@@ -745,7 +745,6 @@ Restart_ServerStatus_server(){
 	check_pid_server
 	[[ ! -z ${PID} ]] && /etc/init.d/status-server stop
 	/etc/init.d/status-server start
-	./ServerStatus_Install.sh -menu_server
 }
 Uninstall_ServerStatus_server(){
 	check_installed_server_status
