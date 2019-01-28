@@ -39,25 +39,37 @@ echo -e "
  ${Green_font_prefix}1.${Font_color_suffix} 启动  S S R
  ${Green_font_prefix}2.${Font_color_suffix} 停止  S S R
  ${Green_font_prefix}3.${Font_color_suffix} 重启  S S R
- ${Green_font_prefix}4.${Font_color_suffix} SSR  状  态"
+ ${Green_font_prefix}4.${Font_color_suffix} SSR  状  态
+ ${Green_font_prefix}5.${Font_color_suffix} 返回主菜单"
   echo
-read -p " 请输入数字 [1-4]:" num
+read -p " 请输入数字 [1-5]:" num
 case "$num" in
 	1)
 	/etc/init.d/shadowsocks start
+	sleep 3s
+        SSR_MENU
 	;;
 	2)
 	/etc/init.d/shadowsocks stop
+	sleep 3s
+        SSR_MENU
 	;;
 	3)
 	/etc/init.d/shadowsocks restart
+	sleep 3s
+        SSR_MENU
 	;;
 	4)
 	/etc/init.d/shadowsocks status
+	sleep 3s
+        SSR_MENU
 	;;
+        5)
+        ./MENU.sh
+        ;;
 	*)
 	clear
-	echo -e "请输入正确数字 [1-4]"
+	echo -e "请输入正确数字 [1-5]"
 	sleep 3s
 	SSR_MENU
 	;;
@@ -89,12 +101,12 @@ echo "卸载成功"
 start_menu(){
 clear
 echo -e "
-  一键安装管理脚本 V1.15
+  一键安装管理脚本 V1.12
  ${Green_font_prefix}1.${Font_color_suffix} 一 键 安 装  S S R
  ${Green_font_prefix}2.${Font_color_suffix} 一 键 安 装  宝塔面板 
  ${Green_font_prefix}3.${Font_color_suffix} B B R 加 速  管理菜单
  ${Green_font_prefix}4.${Font_color_suffix} 状 态 监 控  管理菜单
- ${Green_font_prefix}5.${Font_color_suffix} S  S  R    服务管理
+ ${Green_font_prefix}5.${Font_color_suffix} S   S   R    服务管理
  ${Green_font_prefix}6.${Font_color_suffix} 一 键 卸 载  S S R
  ${Green_font_prefix}7.${Font_color_suffix} 一 键 卸 载  脚本
  ${Green_font_prefix}8.${Font_color_suffix} 退 出 脚 本"
