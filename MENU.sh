@@ -113,7 +113,7 @@ case "$num" in
 	4)
 	Install_ServerStatus
 	;;
-	5）
+	5)
 	SSR_MENU
 	;;
 	6)
