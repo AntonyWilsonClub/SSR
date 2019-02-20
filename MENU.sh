@@ -136,7 +136,7 @@ SSR(){
 clear
 echo "
    SSR后端管理
- -------------
+ ---------------
  ${Green_font_prefix}1.${Font_color_suffix} 启动
  ${Green_font_prefix}2.${Font_color_suffix} 停止
  ${Green_font_prefix}3.${Font_color_suffix} 配置节点
@@ -191,11 +191,11 @@ BBRPlus(){
 clear
 echo "
    BBRPlus管理
- --------------
+ ---------------
  ${Green_font_prefix}1.${Font_color_suffix} 停用BBRPlus
  ${Green_font_prefix}2.${Font_color_suffix} 返回上一层
  ${Green_font_prefix}3.${Font_color_suffix} 返回主菜单"
-
+echo
 BBRPlus_Status
 	if [[ ${kernel_status} == "noinstall" ]]; then
 		echo -e " 当前状态: ${Green_font_prefix}未安装${Font_color_suffix} 加速内核 ${Red_font_prefix}请先安装内核${Font_color_suffix}"
@@ -271,7 +271,7 @@ BTPanle(){
 clear
 echo "
     宝塔面板管理
- ---------------
+ -----------------
  ${Green_font_prefix}1.${Font_color_suffix} 启动
  ${Green_font_prefix}2.${Font_color_suffix} 停止
  ${Green_font_prefix}3.${Font_color_suffix} 重启
@@ -345,7 +345,7 @@ Service(){
 clear
 echo "
     服务管理
- ------------
+ --------------
  ${Green_font_prefix}1.${Font_color_suffix} SSR后端管理
  ${Green_font_prefix}2.${Font_color_suffix} BBRPlus管理
  ${Green_font_prefix}3.${Font_color_suffix} 宝塔面板管理
@@ -390,12 +390,12 @@ echo "退出成功"
 Start_Menu(){
 clear
 echo "
- 一键安装管理脚本 V2.55
- ${Green_font_prefix}1.${Font_color_suffix} 一 键 安 装
- ${Green_font_prefix}2.${Font_color_suffix} 服 务 管 理
- ${Green_font_prefix}3.${Font_color_suffix} 更 新 脚 本
- ${Green_font_prefix}4.${Font_color_suffix} 卸 载 脚 本
- ${Green_font_prefix}5.${Font_color_suffix} 退 出 脚 本"
+ 一键安装管理脚本 V2.56
+  ${Green_font_prefix}1.${Font_color_suffix} 一 键 安 装
+  ${Green_font_prefix}2.${Font_color_suffix} 服 务 管 理
+  ${Green_font_prefix}3.${Font_color_suffix} 更 新 脚 本
+  ${Green_font_prefix}4.${Font_color_suffix} 卸 载 脚 本
+  ${Green_font_prefix}5.${Font_color_suffix} 退 出 脚 本"
  echo
 read -p " 请输入数字 [1-5]:" num
 case "$num" in
