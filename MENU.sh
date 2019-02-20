@@ -445,7 +445,7 @@ echo "卸载成功"
 start_menu(){
 clear
 echo -e "
-  一键安装管理脚本 V1.12
+  一键安装管理脚本 V2.11
  ${Green_font_prefix}1.${Font_color_suffix} 一 键 安 装  运行环境
  ${Green_font_prefix}2.${Font_color_suffix} 一 键 安 装  S S R+BBR_Plus加速+宝塔面板
  ${Green_font_prefix}3.${Font_color_suffix} 一 键 安 装  SSR后端+BBR_Plus加速+宝塔面板
