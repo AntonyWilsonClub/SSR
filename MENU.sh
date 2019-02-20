@@ -32,7 +32,7 @@ else
 echo -e " 检测到 内核 数量不正确，请检查 !" && exit 1
 fi
 if [ ! -f "/boot/grub2/grub.cfg" ]; then
-echo -e "${Error} /boot/grub2/grub.cfg 找不到，请检查."
+echo -e "/boot/grub2/grub.cfg 找不到，请检查."
 exit 1
 fi
 grub2-set-default 0
@@ -79,7 +79,7 @@ fi
 echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_congestion_control=bbrplus" >> /etc/sysctl.conf
 sysctl -p
-echo -e "${Info}BBRplus启动成功！"
+echo -e "BBRplus启动成功！"
 }
 
 #安装加速服务
