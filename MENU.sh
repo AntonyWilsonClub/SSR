@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
-version=2.52
 
 #安装SSR+BBR_Plus加速+宝塔面板
 Install(){
@@ -132,7 +131,7 @@ BBRPlus_Status(){
 SSR(){
 clear
 echo "
-  SSR后端管理
+    SSR后端管理
  ${Green_font_prefix}1.${Font_color_suffix} 启动
  ${Green_font_prefix}2.${Font_color_suffix} 停止
  ${Green_font_prefix}3.${Font_color_suffix} 配置节点
@@ -186,11 +185,11 @@ case "$num" in
 BBRPlus(){
 clear
 echo "
-  BBRPlus管理
+   BBRPlus管理
  ${Green_font_prefix}1.${Font_color_suffix} 停用BBRPlus
  ${Green_font_prefix}2.${Font_color_suffix} 返回上一层
  ${Green_font_prefix}3.${Font_color_suffix} 返回主菜单"
- check_status
+ BBRPlus_Status
 	if [[ ${kernel_status} == "noinstall" ]]; then
 		echo -e " 当前状态: ${Green_font_prefix}未安装${Font_color_suffix} 加速内核 ${Red_font_prefix}请先安装内核${Font_color_suffix}"
 	else
@@ -264,7 +263,7 @@ case "$num" in
 BTPanle(){
 clear
 echo "
-  宝塔面板管理
+    宝塔面板管理
  ${Green_font_prefix}1.${Font_color_suffix} 启动
  ${Green_font_prefix}2.${Font_color_suffix} 停止
  ${Green_font_prefix}3.${Font_color_suffix} 重启
@@ -382,7 +381,7 @@ echo "退出成功"
 Start_Menu(){
 clear
 echo "
-  一键安装管理脚本 V2.52
+  一键安装管理脚本 V2.53
  ${Green_font_prefix}1.${Font_color_suffix} 一 键 安 装
  ${Green_font_prefix}2.${Font_color_suffix} 服 务 管 理
  ${Green_font_prefix}3.${Font_color_suffix} 更 新 脚 本
