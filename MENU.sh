@@ -399,7 +399,7 @@ case "$num" in
 	3)
 	wget -N https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/MENU.sh
 	chmod +x MENU.sh
-	./MUNE.sh
+	./MENU.sh
 	;;
 	4)
 	Uninstall
