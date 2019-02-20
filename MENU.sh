@@ -353,6 +353,7 @@ case "$num" in
 	;;
 	4)
 	Start_Menu
+	;;
 	*)
 	clear
 	echo -e "请输入正确数字 [1-4]"
