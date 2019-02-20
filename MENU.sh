@@ -105,7 +105,7 @@ if [[ $yn == [Yy] ]]; then
 echo -e "${Info} 服务器重启中..."
 reboot
 else
-Start_Menu
+Start_MENU
 fi
 }
 #BBRPlus状态
@@ -177,7 +177,7 @@ case "$num" in
 	Service
 	;;
 	7)
-	Start_Menu
+	Start_MENU
 	;;
 	*)
 	clear
@@ -257,7 +257,7 @@ case "$num" in
 	Service
 	;;
 	3)
-	Start_Menu
+	Start_MENU
 	;;
 	*)
 	clear
@@ -324,7 +324,7 @@ case "$num" in
 	Service
 	;;
 	9)
-	Start_Menu
+	Start_MENU
 	;;
 	*)
 	clear
@@ -357,7 +357,7 @@ case "$num" in
 	BTPanle
 	;;
 	4)
-	Start_Menu
+	Start_MENU
 	;;
 	*)
 	clear
@@ -414,7 +414,7 @@ case "$num" in
 	clear
 	echo -e "请输入正确数字 [1-5]"
 	sleep 3s
-	Start_Menu
+	Start_MENU
 	;;
   esac
 }
