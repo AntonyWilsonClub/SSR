@@ -395,7 +395,7 @@ case "$num" in
 	Service
 	;;
 	3)
-	wget https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/MENU.sh -o MENU.sh
+	wget -N https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/MENU.sh
 	chmod +x MENU.sh
 	./MUNE.sh
 	4)
