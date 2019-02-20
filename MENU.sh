@@ -189,13 +189,13 @@ echo "---------------------------"
 echo
 break
 done
-   # Install necessary dependencies
-    if check_sys packageManager yum; then
-        yum install -y python python-devel python-setuptools openssl openssl-devel curl wget unzip gcc automake autoconf make libtool
-    elif check_sys packageManager apt; then
-        apt-get -y update
-        apt-get -y install python python-dev python-setuptools openssl libssl-dev curl wget unzip gcc automake autoconf make libtool
-    fi
+# Install necessary dependencies
+if check_sys packageManager yum; then
+yum install -y python python-devel python-setuptools openssl openssl-devel curl wget unzip gcc automake autoconf make libtool
+elif check_sys packageManager apt; then
+apt-get -y update
+apt-get -y install python python-dev python-setuptools openssl libssl-dev curl wget unzip gcc automake autoconf make libtool
+fi
 cd ${cur_dir}
 # Download libsodium file
 if ! wget --no-check-certificate -O ${libsodium_file}.tar.gz ${libsodium_url}; then
@@ -240,58 +240,58 @@ cat > /etc/shadowsocks.json<<-EOF
 }
 EOF
 systemctl status firewalld > /dev/null 2>&1
-        if [ $? -eq 0 ]; then
-            default_zone=$(firewall-cmd --get-default-zone)
-            firewall-cmd --permanent --zone=${default_zone} --add-port=${shadowsocksport}/tcp
-            firewall-cmd --permanent --zone=${default_zone} --add-port=${shadowsocksport}/udp
-            firewall-cmd --reload
-        else
-            echo -e "[${yellow}Warning${plain}] 防火墙未安装或未启动, 请启用端口 ${shadowsocksport} ."
-        fi
+if [ $? -eq 0 ]; then
+default_zone=$(firewall-cmd --get-default-zone)
+firewall-cmd --permanent --zone=${default_zone} --add-port=${shadowsocksport}/tcp
+firewall-cmd --permanent --zone=${default_zone} --add-port=${shadowsocksport}/udp
+firewall-cmd --reload
+else
+echo -e "[${yellow}Warning${plain}] 防火墙未安装或未启动, 请启用端口 ${shadowsocksport} ."
+fi
 # Install libsodium
     if [ ! -f /usr/lib/libsodium.a ]; then
-        cd ${cur_dir}
-        tar zxf ${libsodium_file}.tar.gz
-        cd ${libsodium_file}
-        ./configure --prefix=/usr && make && make install
-        if [ $? -ne 0 ]; then
-            echo -e "[${red}Error${plain}] libsodium install failed!"
-            install_cleanup
-            exit 1
-        fi
-    fi
+cd ${cur_dir}
+tar zxf ${libsodium_file}.tar.gz
+cd ${libsodium_file}
+./configure --prefix=/usr && make && make install
+if [ $? -ne 0 ]; then
+echo -e "[${red}Error${plain}] libsodium install failed!"
+install_cleanup
+exit 1
+fi
+fi
 
-    ldconfig
-    # Install ShadowsocksR
-    cd ${cur_dir}
-    tar zxf ${shadowsocks_r_file}.tar.gz
-    mv ${shadowsocks_r_file}/shadowsocks /usr/local/
-    if [ -f /usr/local/shadowsocks/server.py ]; then
-        chmod +x /etc/init.d/shadowsocks
-        if check_sys packageManager yum; then
-            chkconfig --add shadowsocks
-            chkconfig shadowsocks on
-        elif check_sys packageManager apt; then
-            update-rc.d -f shadowsocks defaults
-        fi
-        /etc/init.d/shadowsocks start
+ldconfig
+# Install ShadowsocksR
+cd ${cur_dir}
+tar zxf ${shadowsocks_r_file}.tar.gz
+mv ${shadowsocks_r_file}/shadowsocks /usr/local/
+if [ -f /usr/local/shadowsocks/server.py ]; then
+chmod +x /etc/init.d/shadowsocks
+if check_sys packageManager yum; then
+chkconfig --add shadowsocks
+chkconfig shadowsocks on
+elif check_sys packageManager apt; then
+update-rc.d -f shadowsocks defaults
+fi
+/etc/init.d/shadowsocks start
 
-        clear
-        echo
-        echo -e "恭喜,ShadowsocksR 安装完成!"
-        echo -e "服务器地址 :  $(get_ip)"
-        echo -e "服务器端口 :  ${shadowsocksport}"
-        echo -e "服务器密码 :  ${shadowsockspwd}"
-        echo -e "服务器协议 :  ${shadowsockprotocol}"
-        echo -e "服务器混淆 :  ${shadowsockobfs}"
-        echo -e "服务器加密 :  ${shadowsockscipher}"
-        echo -e 
-        echo
-    else
-        echo "ShadowsocksR 安装失败"
-        cd ${cur_dir}
-        rm -rf ${shadowsocks_r_file}.tar.gz ${shadowsocks_r_file} ${libsodium_file}.tar.gz ${libsodium_file}
-        exit 1
+clear
+echo
+echo -e "恭喜,ShadowsocksR 安装完成!"
+echo -e "服务器地址 :  $(get_ip)"
+echo -e "服务器端口 :  ${shadowsocksport}"
+echo -e "服务器密码 :  ${shadowsockspwd}"
+echo -e "服务器协议 :  ${shadowsockprotocol}"
+echo -e "服务器混淆 :  ${shadowsockobfs}"
+echo -e "服务器加密 :  ${shadowsockscipher}"
+echo -e 
+echo
+else
+echo "ShadowsocksR 安装失败"
+cd ${cur_dir}
+rm -rf ${shadowsocks_r_file}.tar.gz ${shadowsocks_r_file} ${libsodium_file}.tar.gz ${libsodium_file}
+exit 1
 fi
 #安装BBR_Plus加速
 github="raw.githubusercontent.com/chiakge/Linux-NetSpeed/master"
