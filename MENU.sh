@@ -17,7 +17,7 @@ EOF
 source ~/.bashrc
 pyenv install 3.7.1
 pyenv global 3.7.1
-cd shadowsocksr
+cd /root/shadowsocksr
 pip install -r requestment.txt
 echo "安装成功，即将进入后端配置"
 sleep 5s
@@ -155,22 +155,26 @@ case "$num" in
 	SSR
 	;;
 	2)
-	/root/shadowsocksr/stop.sh
+	cd /root/shadowsocksr
+	sh stop.sh
 	echo "停止成功"
 	sleep 3s
 	SSR
 	;;
 	3)
-	/root/shadowsocksr/tail.sh
+	cd /root/shadowsocksr
+	sh tail.sh
 	sleep 3s
 	SSR
 	;;
 	4)
-	/root/shadowsocksr/vi user-config.json
+	cd /root/shadowsocksr
+	vi user-config.json
 	SSR
 	;;
 	5)
-	/root/shadowsocksr/vi usermysql.json
+	cd /root/shadowsocksr
+	vi usermysql.json
 	SSR
 	;;
 	6)
