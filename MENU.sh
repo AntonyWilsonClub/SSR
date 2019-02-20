@@ -148,27 +148,27 @@ echo "
 read -p " 请输入数字 [1-7]:" num
 case "$num" in
 	1)
-	cd shadowsocksr
+	cd /shadowsocksr
 	sh logrun.sh
 	SSR
 	;;
 	2)
-	cd shadowsocksr
+	cd /shadowsocksr
 	sh stop.sh
 	SSR
 	;;
 	3)
-	cd shadowsocksr
+	cd /shadowsocksr
 	sh tail.sh
 	SSR
 	;;
 	4)
-	cd shadowsocksr
+	cd /shadowsocksr
 	vi user-config.json
 	SSR
 	;;
 	5)
-	cd shadowsocksr
+	cd /shadowsocksr
 	vi usermysql.json
 	SSR
 	;;
@@ -278,12 +278,11 @@ echo "
  ${Green_font_prefix}4.${Font_color_suffix} 卸载
  ${Green_font_prefix}5.${Font_color_suffix} 关闭面板SSL
  ${Green_font_prefix}6.${Font_color_suffix} 清理登陆限制
- ${Green_font_prefix}7.${Font_color_suffix} 查看当前面板端口
- ${Green_font_prefix}8.${Font_color_suffix} 删除域名绑定面板
- ${Green_font_prefix}9.${Font_color_suffix} 返回上一层
- ${Green_font_prefix}10.${Font_color_suffix} 返回主菜单"
+ ${Green_font_prefix}7.${Font_color_suffix} 删除域名绑定面板
+ ${Green_font_prefix}8.${Font_color_suffix} 返回上一层
+ ${Green_font_prefix}9.${Font_color_suffix} 返回主菜单"
  echo 
-read -p " 请输入数字 [1-10]:" num
+read -p " 请输入数字 [1-9]:" num
 case "$num" in
 	1)
 	/etc/init.d/bt start
@@ -316,25 +315,19 @@ case "$num" in
 	BTPanle
 	;;
 	7)
-	cat /www/server/panel/data/port.pl
-	echo "请按任意键返回(Ctrl+C退出)"
-	char=`get_char`
-	BTPanle
-	;;
-	8)
 	rm -f /www/server/panel/data/domain.conf
 	sleep 3s
 	BTPanle
 	;;
-	9)
+	8)
 	Service
 	;;
-	10)
+	9)
 	Start_Menu
 	;;
 	*)
 	clear
-	echo -e "请输入正确数字 [1-10]"
+	echo -e "请输入正确数字 [1-9]"
 	sleep 3s
 	BTPanle
 	;;
@@ -390,7 +383,7 @@ echo "退出成功"
 Start_Menu(){
 clear
 echo "
- 一键安装管理脚本 V2.56
+ 一键安装管理脚本 V2.57
   ${Green_font_prefix}1.${Font_color_suffix} 一 键 安 装
   ${Green_font_prefix}2.${Font_color_suffix} 服 务 管 理
   ${Green_font_prefix}3.${Font_color_suffix} 更 新 脚 本
