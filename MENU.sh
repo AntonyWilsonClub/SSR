@@ -148,7 +148,8 @@ echo "
 read -p " 请输入数字 [1-7]:" num
 case "$num" in
 	1)
-	/shadowsocksr/sh logrun.sh
+	cd "/shadowsocksr"
+	sh logrun.sh
 	SSR
 	;;
 	2)
