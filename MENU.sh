@@ -148,26 +148,29 @@ echo "
 read -p " 请输入数字 [1-7]:" num
 case "$num" in
 	1)
-	cd shadowsocksr
+	cd /root/shadowsocksr
 	logrun.sh
+	echo "启动成功"
 	sleep 3s
 	SSR
 	;;
 	2)
 	/root/shadowsocksr/stop.sh
+	echo "停止成功"
 	sleep 3s
 	SSR
 	;;
 	3)
-	/shadowsocksr/sh tail.sh
+	/root/shadowsocksr/tail.sh
+	sleep 3s
 	SSR
 	;;
 	4)
-	/shadowsocksr/vi user-config.json
+	/root/shadowsocksr/vi user-config.json
 	SSR
 	;;
 	5)
-	/shadowsocksr/vi usermysql.json
+	/root/shadowsocksr/vi usermysql.json
 	SSR
 	;;
 	6)
@@ -381,7 +384,7 @@ echo "退出成功"
 Start_MENU(){
 clear
 echo "
- 一键安装管理脚本 V2.61
+ 一键安装管理脚本 V2.62
   ${Green_font_prefix}1.${Font_color_suffix} 一 键 安 装
   ${Green_font_prefix}2.${Font_color_suffix} 服 务 管 理
   ${Green_font_prefix}3.${Font_color_suffix} 更 新 脚 本
