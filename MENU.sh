@@ -105,6 +105,29 @@ echo -e "${Info} 服务器重启中..."
 reboot
 fi
 }
+#BBRPlus状态
+BBRPlus_Status(){
+	kernel_version=`uname -r | awk -F "-" '{print $1}'`
+	kernel_version_full=`uname -r`
+	if [[ ${kernel_version_full} = "4.14.91-bbrplus" ]]; then
+		kernel_status="BBRplus"
+	else 
+		kernel_status="noinstall"
+	fi
+	if [[ ${kernel_status} == "BBRplus" ]]; then
+		run_status=`grep "net.ipv4.tcp_congestion_control" /etc/sysctl.conf | awk -F "=" '{print $2}'`
+		if [[ ${run_status} == "bbrplus" ]]; then
+			run_status=`lsmod | grep "bbrplus" | awk '{print $1}'`
+			if [[ ${run_status} == "tcp_bbrplus" ]]; then
+				run_status="BBRplus启动成功"
+			else 
+				run_status="BBRplus启动失败"
+			fi
+		else 
+			run_status="未安装加速模块"
+		fi
+	fi
+}
 #SSR后端管理
 SSR(){
 clear
@@ -390,26 +413,3 @@ case "$num" in
 }
 
 Start_Menu
-
-BBRPlus_Status(){
-	kernel_version=`uname -r | awk -F "-" '{print $1}'`
-	kernel_version_full=`uname -r`
-	if [[ ${kernel_version_full} = "4.14.91-bbrplus" ]]; then
-		kernel_status="BBRplus"
-	else 
-		kernel_status="noinstall"
-	fi
-	if [[ ${kernel_status} == "BBRplus" ]]; then
-		run_status=`grep "net.ipv4.tcp_congestion_control" /etc/sysctl.conf | awk -F "=" '{print $2}'`
-		if [[ ${run_status} == "bbrplus" ]]; then
-			run_status=`lsmod | grep "bbrplus" | awk '{print $1}'`
-			if [[ ${run_status} == "tcp_bbrplus" ]]; then
-				run_status="BBRplus启动成功"
-			else 
-				run_status="BBRplus启动失败"
-			fi
-		else 
-			run_status="未安装加速模块"
-		fi
-	fi
-}
