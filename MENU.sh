@@ -189,6 +189,13 @@ echo "---------------------------"
 echo
 break
 done
+   # Install necessary dependencies
+    if check_sys packageManager yum; then
+        yum install -y python python-devel python-setuptools openssl openssl-devel curl wget unzip gcc automake autoconf make libtool
+    elif check_sys packageManager apt; then
+        apt-get -y update
+        apt-get -y install python python-dev python-setuptools openssl libssl-dev curl wget unzip gcc automake autoconf make libtool
+    fi
 cd ${cur_dir}
 # Download libsodium file
 if ! wget --no-check-certificate -O ${libsodium_file}.tar.gz ${libsodium_url}; then
