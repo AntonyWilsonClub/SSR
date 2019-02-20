@@ -378,7 +378,7 @@ echo "退出成功"
 
 
 #开始菜单
-Start_Menu(){
+Start_MENU(){
 clear
 echo "
  一键安装管理脚本 V2.61
