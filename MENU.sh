@@ -94,14 +94,18 @@ echo "net.ipv4.tcp_congestion_control=bbrplus" >> /etc/sysctl.conf
 sysctl -p
 echo -e "安装成功！BBRplus将在重新启动后运行！即将安装宝塔面板！"
 sleep 5s
+
 #宝塔面板安装
 yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_6.0.sh && bash install.sh
+
 #重启
 stty erase '^H' && read -p "是否现在重启服务器? [Y/N] :" yn
 [ -z "${yn}" ] && yn="y"
 if [[ $yn == [Yy] ]]; then
 echo -e "${Info} 服务器重启中..."
 reboot
+else
+Start_Menu
 fi
 }
 #BBRPlus状态
@@ -386,7 +390,7 @@ echo "退出成功"
 Start_Menu(){
 clear
 echo "
- 一键安装管理脚本 V2.54
+ 一键安装管理脚本 V2.55
  ${Green_font_prefix}1.${Font_color_suffix} 一 键 安 装
  ${Green_font_prefix}2.${Font_color_suffix} 服 务 管 理
  ${Green_font_prefix}3.${Font_color_suffix} 更 新 脚 本
