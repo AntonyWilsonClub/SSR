@@ -13,7 +13,280 @@ start_menu
 
 #安装SSR+BBR_Plus加速+宝塔面板
 Install_SSR(){
-kernel_version="4.14.91"
+#安装SSR
+libsodium_file="libsodium-stable"
+libsodium_url="https://github.com/AntonyWilsonClub/SSR/raw/master/LATEST.tar.gz"
+shadowsocks_r_file="shadowsocksr-3.2.2"
+shadowsocks_r_url="https://github.com/AntonyWilsonClub/SSR/raw/master/shadowsocksr-3.2.2.tar.gz"
+
+#Current folder
+cur_dir=`pwd`
+# Stream Ciphers
+ciphers=(
+none
+aes-256-cfb
+aes-192-cfb
+aes-128-cfb
+aes-256-cfb8
+aes-192-cfb8
+aes-128-cfb8
+aes-256-ctr
+aes-192-ctr
+aes-128-ctr
+chacha20-ietf
+chacha20
+salsa20
+xchacha20
+xsalsa20
+rc4-md5
+)
+
+# Protocol
+protocols=(
+origin
+verify_deflate
+auth_sha1_v4
+auth_sha1_v4_compatible
+auth_aes128_md5
+auth_aes128_sha1
+auth_chain_a
+auth_chain_b
+auth_chain_c
+auth_chain_d
+auth_chain_e
+auth_chain_f
+)
+# obfs
+obfs=(
+plain
+http_simple
+http_simple_compatible
+http_post
+http_post_compatible
+tls1.2_ticket_auth
+tls1.2_ticket_auth_compatible
+tls1.2_ticket_fastauth
+tls1.2_ticket_fastauth_compatible
+)
+# Color
+red='\033[0;31m'
+green='\033[0;32m'
+yellow='\033[0;33m'
+plain='\033[0m'
+
+if [ -s /etc/selinux/config ] && grep 'SELINUX=enforcing' /etc/selinux/config; then
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+setenforce 0
+fi
+echo "请设置ShadowsocksR 密码:"
+read -p "(默认密码: antonywilson.club):" shadowsockspwd
+[ -z "${shadowsockspwd}" ] && shadowsockspwd="antonywilson.club"
+echo
+echo "---------------------------"
+echo "密码 = ${shadowsockspwd}"
+echo "---------------------------"
+echo
+# Set ShadowsocksR config port
+while true
+do
+echo -e "请设置ShadowsocksR 端口:[1-65535]"
+read -p "(默认端口: 2048):" shadowsocksport
+[ -z "${shadowsocksport}" ] && shadowsocksport=2048
+expr ${shadowsocksport} + 1 &>/dev/null
+if [ $? -eq 0 ]; then
+if [ ${shadowsocksport} -ge 1 ] && [ ${shadowsocksport} -le 65535 ] && [ ${shadowsocksport:0:1} != 0 ]; then
+echo
+echo "---------------------------"
+echo "端口 = ${shadowsocksport}"
+echo "---------------------------"
+echo
+break
+fi
+fi
+echo -e "[${red}Error${plain}]请输入正确的端口:[1-65535]"
+done
+
+# Set shadowsocksR config stream ciphers
+while true
+do
+echo -e "请选择ShadowsocksR 加密方式:"
+for ((i=1;i<=${#ciphers[@]};i++ )); do
+hint="${ciphers[$i-1]}"
+echo -e "${green}${i}${plain}) ${hint}"
+done
+read -p "默认加密方式: ${ciphers[1]}:" pick
+[ -z "$pick" ] && pick=2
+expr ${pick} + 1 &>/dev/null
+if [ $? -ne 0 ]; then
+echo -e "[${red}Error${plain}]请输入数字:"
+continue
+fi
+if [[ "$pick" -lt 1 || "$pick" -gt ${#ciphers[@]} ]]; then
+echo -e "[${red}Error${plain}]请输入1至${#ciphers[@]}的数字:"
+continue
+fi
+shadowsockscipher=${ciphers[$pick-1]}
+echo
+echo "---------------------------"
+echo "加密方式 = ${shadowsockscipher}"
+echo "---------------------------"
+echo
+break
+done
+
+# Set shadowsocksR config protocol
+while true
+do
+echo -e "请选择ShadowsocksR 协议:"
+for ((i=1;i<=${#protocols[@]};i++ )); do
+hint="${protocols[$i-1]}"
+echo -e "${green}${i}${plain}) ${hint}"
+done
+read -p "默认协议: ${protocols[4]}:" protocol
+[ -z "$protocol" ] && protocol=5
+expr ${protocol} + 1 &>/dev/null
+if [ $? -ne 0 ]; then
+echo -e "[${red}Error${plain}]请输入数字:"
+continue
+fi
+if [[ "$protocol" -lt 1 || "$protocol" -gt ${#protocols[@]} ]]; then
+echo -e "[${red}Error${plain}]请输入1至${#protocols[@]}的数字:"
+continue
+fi
+shadowsockprotocol=${protocols[$protocol-1]}
+echo
+echo "---------------------------"
+echo "协议 = ${shadowsockprotocol}"
+echo "---------------------------"
+echo
+break
+done
+
+# Set shadowsocksR config obfs
+while true
+do
+echo -e "请选择ShadowsocksR 混淆方式:"
+for ((i=1;i<=${#obfs[@]};i++ )); do
+hint="${obfs[$i-1]}"
+echo -e "${green}${i}${plain}) ${hint}"
+done
+read -p "默认混淆方式: ${obfs[0]}:" r_obfs
+[ -z "$r_obfs" ] && r_obfs=1
+expr ${r_obfs} + 1 &>/dev/null
+if [ $? -ne 0 ]; then
+echo -e "[${red}Error${plain}]请输入数字:"
+continue
+fi
+if [[ "$r_obfs" -lt 1 || "$r_obfs" -gt ${#obfs[@]} ]]; then
+echo -e "[${red}Error${plain}]请输入1至${#obfs[@]}的数字:"
+continue
+fi
+shadowsockobfs=${obfs[$r_obfs-1]}
+echo
+echo "---------------------------"
+echo "混淆方式 = ${shadowsockobfs}"
+echo "---------------------------"
+echo
+break
+done
+cd ${cur_dir}
+# Download libsodium file
+if ! wget --no-check-certificate -O ${libsodium_file}.tar.gz ${libsodium_url}; then
+echo -e "[${red}Error${plain}] 下载失败 ${libsodium_file}.tar.gz!"
+exit 1
+fi
+# Download ShadowsocksR file
+if ! wget --no-check-certificate -O ${shadowsocks_r_file}.tar.gz ${shadowsocks_r_url}; then
+echo -e "[${red}Error${plain}] ShadowsocksR下载失败!"
+exit 1
+fi
+# Download ShadowsocksR init script
+if check_sys packageManager yum; then
+if ! wget --no-check-certificate https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/ssr -O /etc/init.d/shadowsocks; then
+echo -e "[${red}Error${plain}] ShadowsocksR配置文件下载失败!"
+exit 1
+fi
+elif check_sys packageManager apt; then
+if ! wget --no-check-certificate https://raw.githubusercontent.com/AntonyWilsonClub/SSR/master/ssr-bebian -O /etc/init.d/shadowsocks; then
+echo -e "[${red}Error${plain}] ShadowsocksR配置文件下载失败!"
+exit 1
+fi
+fi
+cat > /etc/shadowsocks.json<<-EOF
+{
+    "server":"0.0.0.0",
+    "server_ipv6":"[::]",
+    "server_port":${shadowsocksport},
+    "local_address":"127.0.0.1",
+    "local_port":1080,
+    "password":"${shadowsockspwd}",
+    "timeout":120,
+    "method":"${shadowsockscipher}",
+    "protocol":"${shadowsockprotocol}",
+    "protocol_param":"",
+    "obfs":"${shadowsockobfs}",
+    "obfs_param":"",
+    "redirect":"",
+    "dns_ipv6":false,
+    "fast_open":false,
+    "workers":1
+}
+EOF
+systemctl status firewalld > /dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            default_zone=$(firewall-cmd --get-default-zone)
+            firewall-cmd --permanent --zone=${default_zone} --add-port=${shadowsocksport}/tcp
+            firewall-cmd --permanent --zone=${default_zone} --add-port=${shadowsocksport}/udp
+            firewall-cmd --reload
+        else
+            echo -e "[${yellow}Warning${plain}] 防火墙未安装或未启动, 请启用端口 ${shadowsocksport} ."
+        fi
+# Install libsodium
+    if [ ! -f /usr/lib/libsodium.a ]; then
+        cd ${cur_dir}
+        tar zxf ${libsodium_file}.tar.gz
+        cd ${libsodium_file}
+        ./configure --prefix=/usr && make && make install
+        if [ $? -ne 0 ]; then
+            echo -e "[${red}Error${plain}] libsodium install failed!"
+            install_cleanup
+            exit 1
+        fi
+    fi
+
+    ldconfig
+    # Install ShadowsocksR
+    cd ${cur_dir}
+    tar zxf ${shadowsocks_r_file}.tar.gz
+    mv ${shadowsocks_r_file}/shadowsocks /usr/local/
+    if [ -f /usr/local/shadowsocks/server.py ]; then
+        chmod +x /etc/init.d/shadowsocks
+        if check_sys packageManager yum; then
+            chkconfig --add shadowsocks
+            chkconfig shadowsocks on
+        elif check_sys packageManager apt; then
+            update-rc.d -f shadowsocks defaults
+        fi
+        /etc/init.d/shadowsocks start
+
+        clear
+        echo
+        echo -e "恭喜,ShadowsocksR 安装完成!"
+        echo -e "服务器地址 :  $(get_ip)"
+        echo -e "服务器端口 :  ${shadowsocksport}"
+        echo -e "服务器密码 :  ${shadowsockspwd}"
+        echo -e "服务器协议 :  ${shadowsockprotocol}"
+        echo -e "服务器混淆 :  ${shadowsockobfs}"
+        echo -e "服务器加密 :  ${shadowsockscipher}"
+        echo -e 
+        echo
+    else
+        echo "ShadowsocksR 安装失败"
+        cd ${cur_dir}
+        rm -rf ${shadowsocks_r_file}.tar.gz ${shadowsocks_r_file} ${libsodium_file}.tar.gz ${libsodium_file}
+        exit 1
+fi
+#安装BBR_Plus加速
 github="raw.githubusercontent.com/chiakge/Linux-NetSpeed/master"
 wget -N --no-check-certificate https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/bbrplus/centos/7/kernel-4.14.91.rpm
 yum install -y kernel-4.14.91.rpm
@@ -79,7 +352,7 @@ fi
 echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_congestion_control=bbrplus" >> /etc/sysctl.conf
 sysctl -p
-echo -e "BBRplus启动成功！"
+echo -e "安装成功！BBRplus将在重新启动后运行！"
 }
 
 #安装加速服务
