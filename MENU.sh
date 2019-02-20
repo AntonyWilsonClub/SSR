@@ -137,7 +137,6 @@ case "$num" in
 	1)
 	Install
 	;;
-	)
 	Exit_SH
 	;;
 	*)
