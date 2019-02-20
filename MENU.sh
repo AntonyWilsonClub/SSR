@@ -140,7 +140,8 @@ echo "
  ${Green_font_prefix}5.${Font_color_suffix} 查看日志
  ${Green_font_prefix}6.${Font_color_suffix} 返回上一层
  ${Green_font_prefix}7.${Font_color_suffix} 返回主菜单"
-echo read -p " 请输入数字 [1-7]:" num
+ echo
+read -p " 请输入数字 [1-7]:" num
 case "$num" in
 	1)
 	cd shadowsocksr
@@ -196,7 +197,8 @@ echo "
 		echo -e " 当前状态: ${Green_font_prefix}已安装${Font_color_suffix} ${_font_prefix}${kernel_status}${Font_color_suffix} 加速内核 , ${Green_font_prefix}${run_status}${Font_color_suffix}"
 		
 	fi
-echo read -p " 请输入数字 [1-3]:" num
+ echo
+read -p " 请输入数字 [1-3]:" num
 case "$num" in
 	1)
 	rm -rf bbrmod
@@ -273,7 +275,8 @@ echo "
  ${Green_font_prefix}8.${Font_color_suffix} 删除域名绑定面板
  ${Green_font_prefix}9.${Font_color_suffix} 返回上一层
  ${Green_font_prefix}10.${Font_color_suffix} 返回主菜单"
-echo read -p " 请输入数字 [1-10]:" num
+ echo 
+read -p " 请输入数字 [1-10]:" num
 case "$num" in
 	1)
 	/etc/init.d/bt start
