@@ -388,7 +388,7 @@ echo "退出成功"
 Start_MENU(){
 clear
 echo "
- 一键安装管理脚本 V2.63
+ 一键安装管理脚本 V2.64
   ${Green_font_prefix}1.${Font_color_suffix} 一 键 安 装
   ${Green_font_prefix}2.${Font_color_suffix} 服 务 管 理
   ${Green_font_prefix}3.${Font_color_suffix} 更 新 脚 本
